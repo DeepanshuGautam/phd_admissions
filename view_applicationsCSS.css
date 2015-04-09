@@ -2,7 +2,11 @@
 	background-color: #F5FFFA ;	
 }
 .topMargin{
-	margin-top: 40px;
+	margin-top: 20px;
+}
+
+.extraMargin{
+	margin-top: 30px;
 }
 
 .betweenMargin{
@@ -19,7 +23,7 @@
 
 .content{
 	margin-left: 10px;
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
 #discipline_label{

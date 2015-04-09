@@ -36,40 +36,107 @@
 				</ul>
 			</li>  
 		</ul>		
+	
+		<?php
+			if(isset($_POST['submit']))
+			{										
+				$year = $_POST['year'];
+				$semester = $_POST['semester'];
+				$discipline = $_POST['discipline'];
 
-		<form method='post' action='view_applications.php'>
+				$query = "select dbName from db_list where year='".$year."' and semester='".$semester."'";
+				$queryResult = mysqli_query($query,$master_database_connection);
+				if($queryResult)
+				{
+					$queryRows = mysqli_num_rows($queryResult);
+					if($queryRows == 0)
+					{
+						echo "<div class='col-md-offset-4 col-md-4 alert alert-danger topMargin' role='alert'>
+							<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+							<span class='sr-only'>Error:</span>
 
-			<div class="panel-group content" id="accordion" role="tablist" aria-multiselectable="true">
-				<div class="panel panel-default">
-					<div class="panel-heading" role="tab" id="headingOne">
-						<h4 class="panel-title">
-							<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-								Choose:
-							</a>
-						</h4>
-					</div>
-					<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-						<div class="panel-body">
-							Deepanshu
-						</div>
+
+							Database doesn't exists!
+							</div>";
+					}
+					else
+					{
+						
+					}
+				}
+				else
+				{
+					echo mysql_error();
+				}
+			}
+		?>
+		<div class="panel-group content" id="accordion" role="tablist" aria-multiselectable="true">		
+			<div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingOne">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion" href="#first_step" aria-expanded="true" aria-controls="collapseOne">
+							Choose:
+						</a>
+					</h4>
+				</div>
+				<div id="first_step" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+					<div class="panel-body">
+						<form method='post' action='view_applications.php'>
+							<div class="col-md-4 col-md-offset-4">
+								<div class="panel panel-info content">
+									<div class="panel-heading center">DataBase</div>
+									<div class="panel-body">
+										<p class="requireTag">*require fields</p>
+										<div class="form-group betweenMargin">
+											<div class="row">
+												<label class="col-md-4">Year*</label>																		
+											</div>
+											<input id="year" name="year" type="text" class="form-control" placeholder="Year"
+												value=
+													<?php
+														if(isset($_POST['submit']))
+														{										
+															echo $year;	
+														} 
+													?>							
+											>
+										</div>
+										<div class="form-group topMargin">
+											<div class="row">
+												<label class="col-md-6">Semester*</label>												
+											</div>
+											<select id='semester' name='semester' class='discipline_options form-control'>
+												<option value=1 <?php if(isset($_POST['submit'])) if($semester == 1) echo "selected";?> >Even(E)</option>
+												<option value=0 <?php if(isset($_POST['submit'])) if($semester == 0) echo "selected";?> >Odd(O)</option>											
+											</select>
+										</div>
+
+										<div class="form-group topMargin">
+											<div class="row">
+												<label class="col-md-4">Course*</label>																		
+											</div>																						
+											<select id="discipline" name="discipline" class="discipline_options form-control">		
+												<option value='Computer Engineering'<?php if(isset($_POST['submit'])) if($_POST['discipline'] == 'Computer Engineering') echo "selected";?> >Computer Engineering</option>
+												<option value='Electronics'<?php if(isset($_POST['submit'])) if($_POST['discipline'] == 'Electronics') echo "selected";?>>Electronics</option>
+												<option value='Mechanical'<?php if(isset($_POST['submit'])) if($_POST['discipline'] == 'Mechanical') echo "selected";?>>Mechanical</option>
+												<option value='Mathematics'<?php if(isset($_POST['submit'])) if($_POST['discipline'] == 'Mathematics') echo "selected";?>>Mathematics</option>
+												<option value='Physics'<?php if(isset($_POST['submit'])) if($_POST['discipline'] == 'Physics') echo "selected";?>>Physics</option>
+											</select>												
+										</div>			
+
+										<div class="center extraMargin">
+											<button name="submit" type="submit" class="btn btn-block btn-success">Submit</button>	
+										</div>					
+									</div>											
+								</div>
+							</div>
+						</form>	
 					</div>
 				</div>
-			</div>
-
-			<div class='content'>
-				<label id='discipline_label'>Discipline: </label>	
-
-				<select id='discipline' name='discipline' class='discipline_options'>
-					<option value='Computer Engineering'<?php if(isset($_POST['submit'])) if($_POST['discipline'] == 'Computer Engineering') echo "selected";?> >Computer Engineering</option>
-					<option value='Electronics'<?php if(isset($_POST['submit'])) if($_POST['discipline'] == 'Electronics') echo "selected";?>>Electronics</option>
-					<option value='Mechanical'<?php if(isset($_POST['submit'])) if($_POST['discipline'] == 'Mechanical') echo "selected";?>>Mechanical</option>
-					<option value='Mathematics'<?php if(isset($_POST['submit'])) if($_POST['discipline'] == 'Mathematics') echo "selected";?>>Mathematics</option>
-					<option value='Physics'<?php if(isset($_POST['submit'])) if($_POST['discipline'] == 'Physics') echo "selected";?>>Physics</option>
-				</select>
-
-				<input type='submit' name='submit' value='Submit' id='submitB'></input>				
-			</div>	
-		</form>	
+			</div>		
+			
+		</div>		
+		
 		<?php
 			if(isset($_POST['submit']))
 			{	

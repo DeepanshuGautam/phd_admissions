@@ -128,8 +128,7 @@
 					</div>
 					<div class="form-group">
 						<div class="row">
-							<label class="col-md-6">Password*</label>
-							<label class="col-md-6"></label>
+							<label class="col-md-6">Password*</label>							
 						</div>
 						<input type="password" class="form-control" name="password" placeholder="Password">
 					</div>							
