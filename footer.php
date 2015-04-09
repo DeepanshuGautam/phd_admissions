@@ -11,6 +11,7 @@
 			<center><p class="credit">Copyright &copy; 2015 <a target="_blank" href="http://www.iiitdm.ac.in" title="IIITD&amp;M Kancheepuram" >IIITD&amp;M Kancheepuram</a></p></center>
 
 		</div>
+		
     </div>
 </body>
 </html>

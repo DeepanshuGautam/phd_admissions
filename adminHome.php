@@ -40,8 +40,7 @@
 				</ul>
 			</li>  
 		</ul>
-
-
+		
 		<h1 id="welcome_tag">Welcome <?php echo $adminName; ?></h1><br />
 		<div id="all_options">
 			<a href="set_criteria.php"><button class="options">Set Criteria</button></a>
@@ -134,7 +133,10 @@
 									{
 
 										$array = mysqli_fetch_array($queryResult);	
-										$_SESSION['dbName'] = $array['dbName'];							
+										$_SESSION['dbName'] = $array['dbName'];	
+
+										//echo '<p class="text-center col-md-offset-6 col-md-3">Selected Database: '.strtoupper($_SESSION['dbName']).'</p>';
+							
 										//echo $_SESSION['dbName'];
 										if($array['semester'] == 1)
 										{
