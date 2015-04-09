@@ -33,7 +33,8 @@
 				<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 					Settings <span class="caret"></span>
 				</a>
-				<ul class="dropdown-menu" role="menu">					
+				<ul class="dropdown-menu" role="menu">	
+					<li><a data-toggle="modal" data-target="#select">Change Database</a></li>
 			 		<li><a href="change_password.php">Change Password</a></li>		
 			 		<li><a href="log_out.php">Log Out</a></li>
 				</ul>
@@ -106,7 +107,7 @@
 			</div>		
 
 			<?php
-				if(!isset($_POST['select']))
+				if(!isset($_POST['select']) && !isset($_SESSION['dbName']))
 				{
 
 				echo '
@@ -119,6 +120,7 @@
 						</div>
 						<div class="modal-body">
 			';						
+								
 								$query = "select dbName,year,semester from db_list where activeStatus = 1";						
 								$queryResult = mysqli_query($masterDbConnection,$query);
 								if($queryResult)
@@ -152,7 +154,8 @@
 								{
 									echo mysqli_error();
 								}
-								echo $msg;																											
+								echo $msg;	
+																																	
 						
 					echo '
 						</div>
@@ -269,7 +272,7 @@
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-										<button data-toggle="modal" data-target="#select" type="button" data-dismiss="modal" name="select_database" class="btn btn-primary">Select</button>
+										<button data-toggle="modal" data-target="#select" type="button" data-dismiss="modal" name="select_database" class="btn btn-primary">Change</button>
 									</div>
 								</div>
 							</div>
@@ -322,7 +325,7 @@
 				</div>
 			</div>
 		</form>
-
+		<?php include("footer.php");?>
 	</body>
 </html>
 
