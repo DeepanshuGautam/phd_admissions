@@ -38,14 +38,14 @@
 		</ul>		
 	
 		<?php
-			if(isset($_POST['submit']))
+			if(isset($_POST['submit']) && isset($_SESSION['adminUserName']))
 			{										
 				$year = $_POST['year'];
 				$semester = $_POST['semester'];
 				$discipline = $_POST['discipline'];
 
 				$query = "select dbName from db_list where year='".$year."' and semester='".$semester."'";
-				$queryResult = mysqli_query($query,$master_database_connection);
+				$queryResult = mysqli_query($master_database_connection,$query);
 				if($queryResult)
 				{
 					$queryRows = mysqli_num_rows($queryResult);
@@ -191,6 +191,6 @@
 					}
 				}				
 			}			
-		?>		
+		?>			
 	</body>
 </html>

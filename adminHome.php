@@ -49,43 +49,8 @@
 			<a ><button data-toggle="modal" data-target="#activate" class="options">Activate Client</button></a>		
 			<a ><button data-toggle="modal" data-target="#deactivate"class="options">Deactivate Client</button></a>
 		</div>	
-	
-		<?php
-			if(isset($_POST['deactivate_database']))
-			{				
-				$queryDA = "update db_list set activeStatus = 0 where dbName ='".$_SESSION["dbName"]."'";
-				$queryResultDA = mysqli_query($masterDbConnection,$queryDA);				
-				if($queryResultDA)
-				{
-					//query executed					
-				}
-				else
-				{
-					echo mysqli_error();
-				}
-				unset($_SESSION['dbName']);
-				unset($_SESSION['year']);
-				unset($_SESSION['semester']);
-			}
-			if(isset($_POST['activate_database']))
-			{
-				if(isset($_SESSION['dbName']))	
-				{
-					$query = "update db_list set activeStatus = 1 where dbName ='".$_SESSION['dbName']."'";
-					$queryResult = mysqli_query($masterDbConnection,$query);
-					if($queryResult)
-					{
-						
-					}
-					else
-					{
-						echo mysqli_error();
-					}
-				}				
-			}					
-		?>
 		
-		<form action="adminHome.php" method="post">																			
+		<form action="adminHome.php" method="post">		
 
 			<div class="modal fade" id="select_database" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
@@ -106,6 +71,115 @@
 			</div>		
 
 			<?php
+				function done_modal($msg)
+				{
+					echo '
+					<div class="modal fade" id="done_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="modal-title" id="myModalLabel">Alert!</h4>
+								</div>
+								<div class="modal-body">
+									The database of '.$_SESSION['semester'].' of year '.$_SESSION['year'].' is SUCCESSFULLY'.$msg.'
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>							
+								</div>
+							</div>
+						</div>
+					</div>
+					';
+
+					echo "<script type='text/javascript'>$('#done_modal').modal('show')</script>";
+				}
+
+				function already_modal($msg)
+				{
+					echo '
+					<div class="modal fade" id="already_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="modal-title" id="myModalLabel">Alert!</h4>
+								</div>
+								<div class="modal-body">
+									The database of '.$_SESSION['semester'].' of year '.$_SESSION['year'].' is already '.$msg.'
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>							
+								</div>
+							</div>
+						</div>
+					</div>
+					';
+
+					echo "<script type='text/javascript'>$('#already_modal').modal('show')</script>";
+				}
+
+				if(isset($_POST['deactivate_database']))
+				{	
+					if(isset($_SESSION['selected']))	
+					{
+						if($_SESSION['activeStatus'] != 1)
+						{						
+							already_modal("deactivated");
+						}
+						else
+						{			
+							$queryDA = "update db_list set activeStatus = 0 where dbName ='".$_SESSION["dbName"]."'";
+							$queryResultDA = mysqli_query($masterDbConnection,$queryDA);				
+							if($queryResultDA)
+							{
+								$_SESSION['activeStatus'] = 0;		
+								done_modal("deactivated");
+							}
+							else
+							{
+								echo mysqli_error();
+							}	
+						}
+					}
+					else
+					{
+						echo "<script type='text/javascript'>$('#select_database').modal('show')</script>";
+					}						
+				}
+				if(isset($_POST['activate_database']))
+				{
+					if(isset($_SESSION['selected']))	
+					{						
+						if($_SESSION['activeStatus'] == 1)
+						{
+							already_modal("activated");							
+						}
+						else
+						{
+							$query = "update db_list set activeStatus = 1 where dbName ='".$_SESSION['dbName']."'";
+							$queryResult = mysqli_query($masterDbConnection,$query);							
+							if($queryResult)
+							{
+								$_SESSION['activeStatus'] = 1;
+								done_modal("activated");
+							}
+							else
+							{
+								echo mysqli_error();
+							}
+						}
+													
+					}
+					else
+					{
+						echo "<script type='text/javascript'>$('#select_database').modal('show')</script>";
+					}				
+				}					
+			?>
+																								
+			<?php
+				//selected database means if some datbase is already active
 				if(!isset($_POST['select']) && !isset($_SESSION['dbName']))
 				{
 
@@ -134,7 +208,7 @@
 
 										$array = mysqli_fetch_array($queryResult);	
 										$_SESSION['dbName'] = $array['dbName'];	
-
+										$_SESSION['selected'] = $array['dbName'];	
 										//echo '<p class="text-center col-md-offset-6 col-md-3">Selected Database: '.strtoupper($_SESSION['dbName']).'</p>';
 							
 										//echo $_SESSION['dbName'];
@@ -148,6 +222,7 @@
 										}
 										$_SESSION['year'] = $array['year'];
 										$_SESSION['semester'] = $sem;
+										$_SESSION['activeStatus'] = 1;
 										$msg = "Selected database is of ".$sem." semester of year ".$array["year"];
 										echo "<script type='text/javascript'>$('#selected_database').modal('show')</script>";
 									}
@@ -182,6 +257,7 @@
 		?>
 
 		<form action="adminHome.php" method="post" id="modal_form">
+
 			<div class="modal fade" id="select" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -231,7 +307,7 @@
 		<?php
 			if(isset($_POST['select']))
 			{	
-				$querySB = "select dbName,year,semester from db_list where year='".$year."' and semester='".$semester."'";
+				$querySB = "select dbName,year,semester,activeStatus from db_list where year='".$year."' and semester='".$semester."'";
 				$queryResultSB = mysqli_query($masterDbConnection,$querySB);
 				if($queryResultSB)
 				{
@@ -248,6 +324,7 @@
 						$array = mysqli_fetch_array($queryResultSB);
 
 						$_SESSION['dbName'] = $array['dbName'];
+						$_SESSION['selected'] = $array['dbName'];
 						if($array['semester'] == 1)
 						{
 							$sem = "Even";
@@ -258,6 +335,7 @@
 						}
 						$_SESSION['year'] = $array['year'];
 						$_SESSION['semester'] = $sem;
+						$_SESSION['activeStatus'] = $array['activeStatus'];
 
 						$msg = "Selected database is of ".$sem." semester of year ".$array["year"];
 						echo '
@@ -299,7 +377,9 @@
 							<h4 class="modal-title" id="myModalLabel">Activate Database</h4>
 						</div>
 						<div class="modal-body">
-							Activate the client?
+							<?php
+								echo "Activate the database of ".$_SESSION['semester']." of year ".$_SESSION['year']."?";
+							?>							
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
@@ -327,6 +407,7 @@
 				</div>
 			</div>
 		</form>
+			
 		<?php include("footer.php");?>
 	</body>
 </html>
