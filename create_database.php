@@ -34,10 +34,11 @@
 		</ul>
 
 		
+
 		<?php
-			function alert_modal()
-			{
-				echo '
+			function alert_modal($msg)
+			{				
+				echo'
 					<div class="modal fade" id="alert_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog">
 							<div class="modal-content">
@@ -46,7 +47,7 @@
 									<h4 class="modal-title" id="myModalLabel">Alert!</h4>
 								</div>
 								<div class="modal-body">
-									Fill in the year value!
+									'.$msg.'
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>							
@@ -54,7 +55,7 @@
 							</div>
 						</div>
 					</div>
-					';
+				';
 
 				echo "<script type='text/javascript'>$('#alert_modal').modal('show')</script>";
 			}
@@ -89,7 +90,7 @@
 
 				if(empty(trim($year)))
 				{
-					alert_modal();
+					alert_modal("Fill in the year value!");
 				}
 				else
 				{
@@ -98,17 +99,176 @@
 					if($queryResult)
 					{
 						$queryRows = mysqli_num_rows($queryResult);
+						if($semester == 0)
+						{
+							$sm = "Odd";
+							$s = "o";
+						}
+						else if($semester == 1)
+						{
+							$sm = "Even";
+							$s = "e";
+						}
+
 						if($queryRows != 0)
 						{
-							if($semester == 0)
-								$sm = "Odd";
-							else
-								$sm = "Even";
+
 							existing_modal($year,$sm);
 						}
 						else
 						{
-							
+							$yrArray = str_split($year,2);							
+							$queryCD = "CREATE DATABASE IF NOT EXISTS dm".(string)$yrArray[1].(string)$s."D DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci";
+							$queryResultCD = mysqli_query($masterDbConnection,$queryCD);
+
+
+
+/*
+USE `dm15ed`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `email_confirmation`
+--
+
+CREATE TABLE IF NOT EXISTS `email_confirmation` (
+`confirmationId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `confirmationLink` varchar(128) NOT NULL,
+  `confirmationStatus` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `experience`
+--
+
+CREATE TABLE IF NOT EXISTS `experience` (
+  `userId` int(11) NOT NULL,
+  `organisationName` varchar(50) NOT NULL,
+  `designation` varchar(50) NOT NULL,
+  `startMonth` varchar(3) NOT NULL,
+  `startYear` int(11) NOT NULL,
+  `endMonth` varchar(3) NOT NULL,
+  `endYear` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_reset`
+--
+
+CREATE TABLE IF NOT EXISTS `password_reset` (
+`resetRequestId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `resetLink` varchar(128) NOT NULL,
+  `resetStatus` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `personal_info`
+--
+
+CREATE TABLE IF NOT EXISTS `personal_info` (
+  `userId` int(11) NOT NULL,
+  `firstName` varchar(50) NOT NULL,
+  `lastName` varchar(50) NOT NULL,
+  `gender` varchar(12) NOT NULL,
+  `dob` varchar(10) NOT NULL,
+  `fatherName` varchar(50) NOT NULL,
+  `nationality` varchar(50) NOT NULL,
+  `maritalStatus` varchar(50) NOT NULL,
+  `physicallyChallenged` tinyint(1) NOT NULL,
+  `community` varchar(50) NOT NULL,
+  `minority` varchar(50) NOT NULL,
+  `primaryEmail` varchar(50) NOT NULL,
+  `alternateEmail` varchar(50) NOT NULL,
+  `currentAddress` varchar(50) NOT NULL,
+  `currentDistrict` varchar(50) NOT NULL,
+  `currentState` varchar(50) NOT NULL,
+  `currentPincode` varchar(15) NOT NULL,
+  `mobileNumber` varchar(15) NOT NULL,
+  `permanentAddress` varchar(50) NOT NULL,
+  `permanentDistrict` varchar(50) NOT NULL,
+  `permanentState` varchar(50) NOT NULL,
+  `permanentPincode` varchar(15) NOT NULL,
+  `alternateMobileNumber` varchar(15) NOT NULL,
+  `age` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `qualifications`
+--
+
+CREATE TABLE IF NOT EXISTS `qualifications` (
+  `userId` int(11) NOT NULL,
+  `10_instituteName` varchar(100) NOT NULL,
+  `10_degreeName` varchar(100) NOT NULL,
+  `10_aggregate` float NOT NULL,
+  `10_gradeFormat` varchar(50) NOT NULL,
+  `10_yearOfPassing` int(11) NOT NULL,
+  `12_instituteName` varchar(100) NOT NULL,
+  `12_degreeName` varchar(100) NOT NULL,
+  `12_aggregate` float NOT NULL,
+  `12_gradeFormat` varchar(50) NOT NULL,
+  `12_yearOfPassing` int(11) NOT NULL,
+  `ug_university` varchar(100) NOT NULL,
+  `ug_degreeName` varchar(100) NOT NULL,
+  `ug_aggregate` float NOT NULL,
+  `ug_gradeFormat` varchar(50) NOT NULL,
+  `ug_yearOfPassing` int(11) NOT NULL,
+  `pg_university` varchar(100) NOT NULL,
+  `pg_degreeName` varchar(100) NOT NULL,
+  `pg_aggregate` float NOT NULL,
+  `pg_gradeFormat` varchar(50) NOT NULL,
+  `pg_yearOfPassing` int(11) NOT NULL,
+  `ug_discipline` varchar(50) NOT NULL,
+  `pg_discipline` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `registered_users`
+--
+
+CREATE TABLE IF NOT EXISTS `registered_users` (
+`userId` int(11) NOT NULL,
+  `emailAddress` varchar(60) NOT NULL,
+  `password` varchar(128) NOT NULL,
+  `discipline` varchar(25) NOT NULL,
+  `mode` varchar(10) NOT NULL,
+  `emailConfirmationStatus` tinyint(1) NOT NULL DEFAULT '0',
+  `applicationSubmitStatus` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+*/
+											
+							//echo $queryCD;
+							if($queryResultCD)
+							{
+								$queryUpdateMasterDB = "insert into phd_admission_master.db_list (dbName,year,semester,activeStatus) values ('dm".(string)$yrArray[1].(string)$s."d',".$year.",".$semester.",0)";
+								$updateQueryResult = mysqli_query($masterDbConnection,$queryUpdateMasterDB);
+								//echo $queryUpdateMasterDB;
+								if($updateQueryResult)
+								{
+									alert_modal("Database of $sm semester of the year $year has been created successfully");
+								}
+								else
+								{
+									echo mysql_error();
+								}
+							}
+							else
+							{
+								echo mysql_error();
+							}
 						}
 					}
 					else
@@ -160,4 +320,7 @@
 	.topMargin{
 		margin-top: 40px;
 	}	
+	#body{
+		width: 98.9%;		
+	}
 </style>
