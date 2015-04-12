@@ -4,11 +4,14 @@
 	<title></title>	
 </head>
 <body>
-	<?php
-		$str = "deepu";
-		$array = str_split($str,2);
-		//echo $array[2];
-		echo var_dump(date("Y"));
-	?>	
+	<button onclick="activate_database()">hello</button>
 </body>
 </html>
+<script type="text/javascript">
+	
+	function activate_database(){	 
+		
+	   alert("hi");
+	}	
+	
+</script>

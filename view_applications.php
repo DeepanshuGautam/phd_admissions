@@ -20,7 +20,10 @@
 	</head>
 	<body id="body">
 		<?php include("adheader.php");?>
-		<!-- <?php //include("navigation_bar.php");?> -->
+		<?php
+			$_SESSION['pageName'] = "view_applications.php";
+			include("select_database.php");	
+		?>		
 		<ul class="nav nav-tabs content">
 			<li role="presentation"><a href="adminHome.php">Home</a></li>	
 			<li role="presentation"><a href="set_criteria.php">Set Criteria</a></li>		
@@ -30,13 +33,38 @@
 				<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 					Settings <span class="caret"></span>
 				</a>
-				<ul class="dropdown-menu" role="menu">					
+				<ul class="dropdown-menu" role="menu">	
+					<li><a data-toggle="modal" data-target="#select">Change Database</a></li>				
 					<li><a href="change_password.php">Change Password</a></li>		
 					<li><a href="log_out.php">Log Out</a></li>
 				</ul>
-			</li>  
+			</li> 
+			<?php
+				if(isset($_SESSION['selected']))
+				{
+					echo "<li class='navbar-right'>
+							<a href='' data-toggle='modal' data-target='#select' style='color:black;";
+							if($_SESSION['activeStatus'] == 0)
+								echo "background-color:#ED6666;";
+							else
+								echo "background-color:#33CC33;";
+							echo "'>".$_SESSION['dbName']."</a>
+						</li>";					
+				}
+				else
+				{
+					echo "<li class='navbar-right' role='presentation'>
+							<a href='' data-toggle='modal' data-target='#select' style='color:black;background-color:#FFFF99';>No DataBase Selected</a>
+						</li>";
+				}
+			?>  
 		</ul>		
-	
+		
+		<?php
+			$_SESSION['pageName'] = "view_applications.php"; 			
+			include("select_database.php");			
+		?>
+
 		<?php
 			if(isset($_POST['submit']) && isset($_SESSION['adminUserName']))
 			{										
@@ -69,73 +97,78 @@
 					echo mysql_error();
 				}
 			}
-		?>
-		<div class="panel-group content" id="accordion" role="tablist" aria-multiselectable="true">		
-			<div class="panel panel-default">
-				<div class="panel-heading" role="tab" id="headingOne">
-					<h4 class="panel-title">
-						<a data-toggle="collapse" data-parent="#accordion" href="#first_step" aria-expanded="true" aria-controls="collapseOne">
-							Choose:
-						</a>
-					</h4>
-				</div>
-				<div id="first_step" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-					<div class="panel-body">
-						<form method='post' action='view_applications.php'>
-							<div class="col-md-4 col-md-offset-4">
-								<div class="panel panel-info content">
-									<div class="panel-heading center">DataBase</div>
-									<div class="panel-body">
-										<p class="requireTag">*require fields</p>
-										<div class="form-group betweenMargin">
-											<div class="row">
-												<label class="col-md-4">Year*</label>																		
-											</div>
-											<input id="year" name="year" type="text" class="form-control" placeholder="Year"
-												value=
-													<?php
-														if(isset($_POST['submit']))
-														{										
-															echo $year;	
-														} 
-													?>							
-											>
-										</div>
-										<div class="form-group topMargin">
-											<div class="row">
-												<label class="col-md-6">Semester*</label>												
-											</div>
-											<select id='semester' name='semester' class='discipline_options form-control'>
-												<option value=1 <?php if(isset($_POST['submit'])) if($semester == 1) echo "selected";?> >Even(E)</option>
-												<option value=0 <?php if(isset($_POST['submit'])) if($semester == 0) echo "selected";?> >Odd(O)</option>											
-											</select>
-										</div>
+		
+			if(isset($_SESSION['selected']))
+			{
 
-										<div class="form-group topMargin">
-											<div class="row">
-												<label class="col-md-4">Course*</label>																		
-											</div>																						
-											<select id="discipline" name="discipline" class="discipline_options form-control">		
-												<option value='Computer Engineering'<?php if(isset($_POST['submit'])) if($_POST['discipline'] == 'Computer Engineering') echo "selected";?> >Computer Engineering</option>
-												<option value='Electronics'<?php if(isset($_POST['submit'])) if($_POST['discipline'] == 'Electronics') echo "selected";?>>Electronics</option>
-												<option value='Mechanical'<?php if(isset($_POST['submit'])) if($_POST['discipline'] == 'Mechanical') echo "selected";?>>Mechanical</option>
-												<option value='Mathematics'<?php if(isset($_POST['submit'])) if($_POST['discipline'] == 'Mathematics') echo "selected";?>>Mathematics</option>
-												<option value='Physics'<?php if(isset($_POST['submit'])) if($_POST['discipline'] == 'Physics') echo "selected";?>>Physics</option>
-											</select>												
-										</div>			
+				echo '
+					<div class="panel-group content" id="accordion" role="tablist" aria-multiselectable="true">		
+						<div class="panel panel-default">
+							<div class="panel-heading" role="tab" id="headingOne">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion" href="#first_step" aria-expanded="true" aria-controls="collapseOne">
+										Choose:
+									</a>
+								</h4>
+							</div>
+							<div id="first_step" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+								<div class="panel-body">
+									<form method="post" action="view_applications.php">
+										<div class="col-md-4 col-md-offset-4">
+											<div class="panel panel-info content">
+												<div class="panel-heading center">Course</div>
+												<div class="panel-body">																					
+													<div class="form-group">																																	
+														<select id="discipline" name="discipline" class="discipline_options form-control">
 
-										<div class="center extraMargin">
-											<button name="submit" type="submit" class="btn btn-block btn-success">Submit</button>	
-										</div>					
-									</div>											
+															<option value="Computer Engineering"';
+															if(isset($_POST["submit"])) 
+																if($_POST["discipline"] == "Computer Engineering") 
+																	echo "selected";
+															echo '>Computer Engineering</option>
+
+															<option value="Electronics"';
+															if(isset($_POST["submit"])) 
+																if($_POST["discipline"] == "Electronics") 
+																	echo "selected";
+															echo '>Electronics</option>
+
+															<option value="Mechanical"';
+															if(isset($_POST["submit"])) 
+																if($_POST["discipline"] == "Mechanical") 
+																	echo "selected";
+															echo '>Mechanical</option>
+
+															<option value="Mathematics"'; 
+															if(isset($_POST["submit"])) 
+																if($_POST["discipline"] == "Mathematics") 
+																	echo "selected";
+															echo '>Mathematics</option>
+
+															<option value="Physics"';
+															if(isset($_POST["submit"])) 
+																if($_POST["discipline"] == "Physics") 
+																	echo "selected";
+															echo '>Physics</option>
+
+														</select>												
+													</div>			
+
+													<div class="center extraMargin">
+														<button name="submit" type="submit" class="btn btn-block btn-success">Submit</button>	
+													</div>					
+												</div>											
+											</div>
+										</div>
+									</form>	
 								</div>
 							</div>
-						</form>	
-					</div>
-				</div>
-			</div>		
-			
-		</div>		
+						</div>		
+						
+					</div>	
+				';
+			}
+		?>	
 		
 		<?php
 			if(isset($_POST['submit']))
@@ -194,3 +227,20 @@
 		?>			
 	</body>
 </html>
+
+<script type="text/javascript">
+	$("#modal_form").submit(function(e) {
+		//alert("hi");
+		
+		var year = document.getElementById('year').value;
+		//var semester = document.getElementById('semester').value;
+
+		//alert(year);
+		//alert(year.length);
+		if(year.length == 0)
+		{
+			alert("Fill in the year");
+			e.preventDefault();
+		}
+	});
+</script>

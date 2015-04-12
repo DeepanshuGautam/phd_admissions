@@ -4,10 +4,13 @@
 
 .content{
 	margin-left: 10px;
-	margin-top: 20px;
-	margin-right: 10px;
+	margin-top: 20px;	
 }
 
 .topMargin{
 	margin-top: 20px;
+}
+
+.requireTag{
+	color: red;
 }
