@@ -1,5 +1,6 @@
+
 <form action="<?php echo $_SESSION['pageName']?>" method="post">		
-	
+
 	<div class="modal fade" id="select_database" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -27,6 +28,7 @@
 	</div>	
 
 	<?php
+
 		//selected database means if some datbase is already active
 		if(!isset($_POST['select']) && !isset($_SESSION['dbName']) && $_SESSION['pageName']!="create_database.php")
 		{
@@ -104,7 +106,7 @@
 	} 
 ?>
 
-<form action="<?php echo $_SESSION['pageName']?>" method="post" id="modal_form">
+<form action="<?php echo $_SESSION['pageName']?>" method="post" id="modal_form">	
 
 	<div class="modal fade" id="select" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">

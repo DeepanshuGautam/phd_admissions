@@ -16,7 +16,7 @@
 				<div class="row col-md-12 vcenter" id="college_name">
 					Indian Institute of Information Technology, Design & Manufacturing
 					<br />
-					IIITD&M, KANCHEEPURAM
+					IIITD&M KANCHEEPURAM
 				</div>
 				<div class="row col-md-12 vcenter" id="sub_headline">(An Institute of National Importance Fully Funded by Govt. of India)											
 				</div>

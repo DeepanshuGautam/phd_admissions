@@ -27,34 +27,11 @@
 	<body id="body">
 		<?php include("adheader.php");?>	
 
-		
-		<div class="modal fade" id="overwrite_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="myModalLabel">Alert!</h4>
-					</div>
-					<div class="modal-body">
-						The database of '.$sm.' semester of year '.$yr.' is already active. Press continue to deactivate this and activate the database of '.$_SESSION['semester'].' semester and year '.$_SESSION['year'].'
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-						<button type="button" name="overwrite" class="btn btn-primary" data-dismiss="modal">Continue</button>								
-					</div>
-				</div>
-			</div>
-		</div>
-		
-
 		<?php
-
-			if(isset($_POST['overwrite']))
-				echo var_dump($_POST['overwrite']);
 
 			$_SESSION['pageName'] = "adminHome.php";
 			include("select_database.php");	
-
+			
 			if(isset($_SESSION['selected']))
 			{
 				$selectedStatus = $_SESSION['selected'];
@@ -66,11 +43,9 @@
 				$activeStatus = -1;
 			}
 
-			if(isset($_POST['overwrite']))			
-			{
-				echo "<script>alert('hi');</script";
-			}
-				
+			
+			$ovSm = "";
+									
 
 			function done_modal($msg)
 			{
@@ -146,16 +121,76 @@
 						{
 							$s = "Even";
 						}
+						echo '
+							<form method="post" action="adminHome.php">	
+								<div class="modal fade" id="overwrite_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+												<h4 class="modal-title" id="myModalLabel">Alert!</h4>
+											</div>
+											<div class="modal-body">
+												The database of '.$s.' semester of '.$array['year'].' year is already active. Press continue to deactivate the active database and activate the database of '.$_SESSION['semester'].' semester and '.$_SESSION['year'].' year. 
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+												<button type="submit" name="overwrite" class="btn btn-primary" onclick="dismiss()">Continue</button>								
+											</div>
+										</div>
+									</div>
+								</div>									
+							</form>	
+						';		
+										
+						$_SESSION['ovYr'] = $array['year'];
+						$_SESSION['ovSm'] = $array['semester'];						
 						echo "<script type='text/javascript'>$('#overwrite_modal').modal('show')</script>";
+						
 					}
 				}
 				else
 				{
 					echo mysqli_error();
-				}	
+				}						
+			}
+			if(isset($_POST['overwrite']))			
+			{				
+				$queryD = "update db_list set activeStatus = 0 where semester = ".$_SESSION['ovSm']." and year = ".$_SESSION['ovYr'];
+				$queryResultD = mysqli_query($masterDbConnection,$queryD);
+				if($queryResultD)
+				{
+					if($_SESSION['semester'] == "Even")
+					{
+						$s = 1;
+					}
+					else
+					{
+						$s = 0;
+					}
 
-									
-			}		
+					$queryA = "update db_list set activeStatus = 1 where semester = ".$s." and year = ".$_SESSION['year'];
+					//echo $queryA;
+					$queryResultA = mysqli_query($masterDbConnection,$queryA);
+					if($queryResultA)
+					{
+						$_SESSION['activeStatus'] = 1;
+						$activeStatus = 1;	
+						//echo $_SESSION['activeStatus'];
+						done_modal("activated");
+					}
+					else
+					{
+						echo mysqli_error($masterDbConnection);
+					}
+				}
+				else
+				{
+					echo mysqli_error($masterDbConnection);
+				}
+				unset($_SESSION['ovYr']);
+				unset($_SESSION['ovSm']);
+			}			
 		?>					
 
 		<ul class="nav nav-tabs content">
@@ -172,22 +207,14 @@
 			</li> 
 			<?php
 				if(isset($_SESSION['selected']))
-				{
-					if($_SESSION['semester'] == 0)
-					{
-						$sem = "Odd";
-					}
-					else
-					{
-						$sem = "Even";
-					}
+				{					
 					echo "<li class='navbar-right'>
 							<a href='' data-toggle='modal' data-target='#select' style='color:black;";
 							if($_SESSION['activeStatus'] == 0)
 								echo "background-color:#ED6666;";
 							else
 								echo "background-color:#33CC33;";
-							echo "'>".$_SESSION['year']."(".$sem.")</a>
+							echo "'>".$_SESSION['year']."(".$_SESSION['semester'].")</a>
 						</li>";					
 				}
 				else
@@ -278,6 +305,11 @@
 </html>
 
 <script type="text/javascript">
+	function dismiss()
+	{
+		$('#overwrite_modal').modal('hide');
+	}
+
 	function deactivate_db(){
 		//alert("hi");
 		var selectedStatus = '<?php echo $selectedStatus;?>';
