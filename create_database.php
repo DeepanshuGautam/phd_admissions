@@ -87,10 +87,15 @@
 			{
 				$year = $_POST['year'];
 				$semester = $_POST['semester'];
+				$done = -1;
 
 				if(empty(trim($year)))
 				{
 					alert_modal("Fill in the year value!");
+				}
+				else if($year < intval(date("Y")) || strlen($year) > 4)
+				{
+					alert_modal("Fill in the valid year!");
 				}
 				else
 				{
@@ -117,148 +122,212 @@
 						}
 						else
 						{
-							$yrArray = str_split($year,2);							
-							$queryCD = "CREATE DATABASE IF NOT EXISTS dm".(string)$yrArray[1].(string)$s."D DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci";
+							$yrArray = str_split($year,2);	
+							$database = "dm".(string)$yrArray[1].(string)$s."d";
+							$queryCD = "CREATE DATABASE IF NOT EXISTS ".$database;
 							$queryResultCD = mysqli_query($masterDbConnection,$queryCD);
-
-
-
-/*
-USE `dm15ed`;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `email_confirmation`
---
-
-CREATE TABLE IF NOT EXISTS `email_confirmation` (
-`confirmationId` int(11) NOT NULL,
-  `userId` int(11) NOT NULL,
-  `confirmationLink` varchar(128) NOT NULL,
-  `confirmationStatus` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `experience`
---
-
-CREATE TABLE IF NOT EXISTS `experience` (
-  `userId` int(11) NOT NULL,
-  `organisationName` varchar(50) NOT NULL,
-  `designation` varchar(50) NOT NULL,
-  `startMonth` varchar(3) NOT NULL,
-  `startYear` int(11) NOT NULL,
-  `endMonth` varchar(3) NOT NULL,
-  `endYear` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `password_reset`
---
-
-CREATE TABLE IF NOT EXISTS `password_reset` (
-`resetRequestId` int(11) NOT NULL,
-  `userId` int(11) NOT NULL,
-  `resetLink` varchar(128) NOT NULL,
-  `resetStatus` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `personal_info`
---
-
-CREATE TABLE IF NOT EXISTS `personal_info` (
-  `userId` int(11) NOT NULL,
-  `firstName` varchar(50) NOT NULL,
-  `lastName` varchar(50) NOT NULL,
-  `gender` varchar(12) NOT NULL,
-  `dob` varchar(10) NOT NULL,
-  `fatherName` varchar(50) NOT NULL,
-  `nationality` varchar(50) NOT NULL,
-  `maritalStatus` varchar(50) NOT NULL,
-  `physicallyChallenged` tinyint(1) NOT NULL,
-  `community` varchar(50) NOT NULL,
-  `minority` varchar(50) NOT NULL,
-  `primaryEmail` varchar(50) NOT NULL,
-  `alternateEmail` varchar(50) NOT NULL,
-  `currentAddress` varchar(50) NOT NULL,
-  `currentDistrict` varchar(50) NOT NULL,
-  `currentState` varchar(50) NOT NULL,
-  `currentPincode` varchar(15) NOT NULL,
-  `mobileNumber` varchar(15) NOT NULL,
-  `permanentAddress` varchar(50) NOT NULL,
-  `permanentDistrict` varchar(50) NOT NULL,
-  `permanentState` varchar(50) NOT NULL,
-  `permanentPincode` varchar(15) NOT NULL,
-  `alternateMobileNumber` varchar(15) NOT NULL,
-  `age` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `qualifications`
---
-
-CREATE TABLE IF NOT EXISTS `qualifications` (
-  `userId` int(11) NOT NULL,
-  `10_instituteName` varchar(100) NOT NULL,
-  `10_degreeName` varchar(100) NOT NULL,
-  `10_aggregate` float NOT NULL,
-  `10_gradeFormat` varchar(50) NOT NULL,
-  `10_yearOfPassing` int(11) NOT NULL,
-  `12_instituteName` varchar(100) NOT NULL,
-  `12_degreeName` varchar(100) NOT NULL,
-  `12_aggregate` float NOT NULL,
-  `12_gradeFormat` varchar(50) NOT NULL,
-  `12_yearOfPassing` int(11) NOT NULL,
-  `ug_university` varchar(100) NOT NULL,
-  `ug_degreeName` varchar(100) NOT NULL,
-  `ug_aggregate` float NOT NULL,
-  `ug_gradeFormat` varchar(50) NOT NULL,
-  `ug_yearOfPassing` int(11) NOT NULL,
-  `pg_university` varchar(100) NOT NULL,
-  `pg_degreeName` varchar(100) NOT NULL,
-  `pg_aggregate` float NOT NULL,
-  `pg_gradeFormat` varchar(50) NOT NULL,
-  `pg_yearOfPassing` int(11) NOT NULL,
-  `ug_discipline` varchar(50) NOT NULL,
-  `pg_discipline` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `registered_users`
---
-
-CREATE TABLE IF NOT EXISTS `registered_users` (
-`userId` int(11) NOT NULL,
-  `emailAddress` varchar(60) NOT NULL,
-  `password` varchar(128) NOT NULL,
-  `discipline` varchar(25) NOT NULL,
-  `mode` varchar(10) NOT NULL,
-  `emailConfirmationStatus` tinyint(1) NOT NULL DEFAULT '0',
-  `applicationSubmitStatus` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-*/
-											
-							//echo $queryCD;
+									
+							//echo "database successfully created";
 							if($queryResultCD)
 							{
-								$queryUpdateMasterDB = "insert into phd_admission_master.db_list (dbName,year,semester,activeStatus) values ('dm".(string)$yrArray[1].(string)$s."d',".$year.",".$semester.",0)";
+								$queryUpdateMasterDB = "insert into phd_admission_master.db_list (dbName,year,semester,activeStatus) values ('".$database."',".$year.",".$semester.",0)";
 								$updateQueryResult = mysqli_query($masterDbConnection,$queryUpdateMasterDB);
-								//echo $queryUpdateMasterDB;
+								//echo "master database successfully updated";								
 								if($updateQueryResult)
 								{
-									alert_modal("Database of $sm semester of the year $year has been created successfully");
+									$emailConfirmQuery = "CREATE TABLE IF NOT EXISTS ".$database.".email_confirmation (
+										confirmationId int(11) NOT NULL AUTO_INCREMENT,
+										userId int(11) NOT NULL,
+										confirmationLink varchar(128) NOT NULL,
+										confirmationStatus tinyint(1) NOT NULL DEFAULT '0',
+										primary key(confirmationId,confirmationLink)
+										)";
+
+									$emailConfirmQueryResult = mysqli_query($masterDbConnection,$emailConfirmQuery);
+															
+									if($emailConfirmQueryResult)
+									{
+										//echo "email_confirmation table created successfully";
+										$experienceQuery = "CREATE TABLE IF NOT EXISTS ".$database.".experience (
+											userId int(11) NOT NULL,
+											organisationName varchar(50) NOT NULL,
+											designation varchar(50) NOT NULL,
+											startMonth varchar(3) NOT NULL,
+											startYear int(11) NOT NULL,
+											endMonth varchar(3) NOT NULL,
+											endYear int(11) NOT NULL,
+											primary key(userId)
+											)";
+
+										$experienceQueryResult = mysqli_query($masterDbConnection,$experienceQuery);
+																
+										if($experienceQueryResult)
+										{
+											//echo "experience table created successfully";
+											$passResetQuery = "CREATE TABLE IF NOT EXISTS ".$database.".password_reset (
+												resetRequestId int(11) NOT NULL AUTO_INCREMENT,
+												userId int(11) NOT NULL,
+												resetLink varchar(128) NOT NULL,
+												resetStatus tinyint(1) NOT NULL DEFAULT '0',
+												primary key(resetRequestId,resetLink)
+												)";
+
+											$passResetQueryResult = mysqli_query($masterDbConnection,$passResetQuery);
+																	
+											if($passResetQueryResult)
+											{
+												//echo "password_reset table created successfully";		
+												$personalInfoQuery = "CREATE TABLE IF NOT EXISTS ".$database.".personal_info (
+													userId int(11) NOT NULL,
+													firstName varchar(50) NOT NULL,
+													lastName varchar(50) NOT NULL,
+													gender varchar(12) NOT NULL,
+													dob varchar(10) NOT NULL,
+													fatherName varchar(50) NOT NULL,
+													nationality varchar(50) NOT NULL,
+													maritalStatus varchar(50) NOT NULL,
+													physicallyChallenged tinyint(1) NOT NULL,
+													community varchar(50) NOT NULL,
+													minority varchar(50) NOT NULL,
+													primaryEmail varchar(50) NOT NULL,
+													alternateEmail varchar(50) NOT NULL,
+													currentAddress varchar(50) NOT NULL,
+													currentDistrict varchar(50) NOT NULL,
+													currentState varchar(50) NOT NULL,
+													currentPincode varchar(15) NOT NULL,
+													mobileNumber varchar(15) NOT NULL,
+													permanentAddress varchar(50) NOT NULL,
+													permanentDistrict varchar(50) NOT NULL,
+													permanentState varchar(50) NOT NULL,
+													permanentPincode varchar(15) NOT NULL,
+													alternateMobileNumber varchar(15) NOT NULL,
+													age int(11) NOT NULL,
+													primary key(userId)
+													)";
+
+												$personalInfoQueryResult = mysqli_query($masterDbConnection,$personalInfoQuery);
+																		
+												if($personalInfoQueryResult)
+												{
+													//echo "personal_info table created successfully";		
+													$qualificationsQuery = "CREATE TABLE IF NOT EXISTS ".$database.".qualifications (
+														userId int(11) NOT NULL,
+														10_instituteName varchar(100) NOT NULL,
+														10_degreeName varchar(100) NOT NULL,
+														10_aggregate float NOT NULL,
+														10_gradeFormat varchar(50) NOT NULL,
+														10_yearOfPassing int(11) NOT NULL,
+														12_instituteName varchar(100) NOT NULL,
+														12_degreeName varchar(100) NOT NULL,
+														12_aggregate float NOT NULL,
+														12_gradeFormat varchar(50) NOT NULL,
+														12_yearOfPassing int(11) NOT NULL,
+														ug_university varchar(100) NOT NULL,
+														ug_degreeName varchar(100) NOT NULL,
+														ug_aggregate float NOT NULL,
+														ug_gradeFormat varchar(50) NOT NULL,
+														ug_yearOfPassing int(11) NOT NULL,
+														pg_university varchar(100) NOT NULL,
+														pg_degreeName varchar(100) NOT NULL,
+														pg_aggregate float NOT NULL,
+														pg_gradeFormat varchar(50) NOT NULL,
+														pg_yearOfPassing int(11) NOT NULL,
+														ug_discipline varchar(50) NOT NULL,
+														pg_discipline varchar(50) NOT NULL,
+														primary key(userId)
+														)";
+
+													$qualificationsQueryResult = mysqli_query($masterDbConnection,$qualificationsQuery);
+																			
+													if($qualificationsQueryResult)
+													{
+														//echo "qualifications table created successfully";		
+														$qualificationsQuery = "CREATE TABLE IF NOT EXISTS ".$database.".qualifications (
+														userId int(11) NOT NULL,
+														10_instituteName varchar(100) NOT NULL,
+														10_degreeName varchar(100) NOT NULL,
+														10_aggregate float NOT NULL,
+														10_gradeFormat varchar(50) NOT NULL,
+														10_yearOfPassing int(11) NOT NULL,
+														12_instituteName varchar(100) NOT NULL,
+														12_degreeName varchar(100) NOT NULL,
+														12_aggregate float NOT NULL,
+														12_gradeFormat varchar(50) NOT NULL,
+														12_yearOfPassing int(11) NOT NULL,
+														ug_university varchar(100) NOT NULL,
+														ug_degreeName varchar(100) NOT NULL,
+														ug_aggregate float NOT NULL,
+														ug_gradeFormat varchar(50) NOT NULL,
+														ug_yearOfPassing int(11) NOT NULL,
+														pg_university varchar(100) NOT NULL,
+														pg_degreeName varchar(100) NOT NULL,
+														pg_aggregate float NOT NULL,
+														pg_gradeFormat varchar(50) NOT NULL,
+														pg_yearOfPassing int(11) NOT NULL,
+														ug_discipline varchar(50) NOT NULL,
+														pg_discipline varchar(50) NOT NULL,
+														primary key(userId)
+														)";
+
+														$qualificationsQueryResult = mysqli_query($masterDbConnection,$qualificationsQuery);
+																				
+														if($qualificationsQueryResult)
+														{
+															//echo "qualifications table created successfully";
+															$regUserQuery = "CREATE TABLE IF NOT EXISTS ".$database.".registered_users (
+																userId int(11) NOT NULL AUTO_INCREMENT,
+																emailAddress varchar(60) NOT NULL,
+																password varchar(128) NOT NULL,
+																discipline varchar(25) NOT NULL,
+																mode varchar(10) NOT NULL,
+																emailConfirmationStatus tinyint(1) NOT NULL DEFAULT '0',
+																applicationSubmitStatus tinyint(1) NOT NULL DEFAULT '0',
+																primary key(userId)
+																)";
+
+															$regUserQueryResult = mysqli_query($masterDbConnection,$regUserQuery);
+																					
+															if($regUserQueryResult)
+															{
+																//echo "registeres_users table created successfully";
+																$done = 1;
+																alert_modal("Database of $sm semester of the year $year has been created successfully");
+															}
+															else
+															{
+																echo mysql_error();
+															}																	
+														}
+														else
+														{
+															echo mysql_error();
+														}	
+														
+													}
+													else
+													{
+														echo mysql_error();
+													}															
+												}
+												else
+												{
+													echo mysql_error();
+												}													
+											}
+											else
+											{
+												echo mysql_error();
+											}														
+										}
+										else
+										{
+											echo mysql_error();
+										}													
+									}
+									else
+									{
+										echo mysql_error();
+									}									
 								}
 								else
 								{
@@ -291,7 +360,7 @@ CREATE TABLE IF NOT EXISTS `registered_users` (
 						<input id="year" name="year" type="text" class="form-control" placeholder="Year"
 							value=
 								<?php
-									if(isset($_POST['submit']))
+									if(isset($_POST['submit']) && $done != 1)
 									{										
 										echo $year;	
 									} 
@@ -303,8 +372,8 @@ CREATE TABLE IF NOT EXISTS `registered_users` (
 							<label class="col-md-3">Semester*</label>												
 						</div>
 						<select id='semester' name='semester' class='discipline_options form-control'>
-							<option value=1 <?php if(isset($_POST['submit'])) if($semester == 1) echo "selected";?> >Even(E)</option>
-							<option value=0 <?php if(isset($_POST['submit'])) if($semester == 0) echo "selected";?> >Odd(O)</option>											
+							<option value=1 <?php if(isset($_POST['submit']) && $done != 1) if($semester == 1) echo "selected";?> >Even(E)</option>
+							<option value=0 <?php if(isset($_POST['submit']) && $done != 1) if($semester == 0) echo "selected";?> >Odd(O)</option>											
 						</select>
 					</div>														
 					<div class="center topMargin">
