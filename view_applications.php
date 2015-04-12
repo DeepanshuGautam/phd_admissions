@@ -65,39 +65,7 @@
 			include("select_database.php");			
 		?>
 
-		<?php
-			if(isset($_POST['submit']) && isset($_SESSION['adminUserName']))
-			{										
-				$year = $_POST['year'];
-				$semester = $_POST['semester'];
-				$discipline = $_POST['discipline'];
-
-				$query = "select dbName from db_list where year='".$year."' and semester='".$semester."'";
-				$queryResult = mysqli_query($master_database_connection,$query);
-				if($queryResult)
-				{
-					$queryRows = mysqli_num_rows($queryResult);
-					if($queryRows == 0)
-					{
-						echo "<div class='col-md-offset-4 col-md-4 alert alert-danger topMargin' role='alert'>
-							<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
-							<span class='sr-only'>Error:</span>
-
-
-							Database doesn't exists!
-							</div>";
-					}
-					else
-					{
-						
-					}
-				}
-				else
-				{
-					echo mysql_error();
-				}
-			}
-		
+		<?php				
 			if(isset($_SESSION['selected']))
 			{
 
@@ -107,7 +75,7 @@
 							<div class="panel-heading" role="tab" id="headingOne">
 								<h4 class="panel-title">
 									<a data-toggle="collapse" data-parent="#accordion" href="#first_step" aria-expanded="true" aria-controls="collapseOne">
-										Choose:
+										Choose Course:
 									</a>
 								</h4>
 							</div>
@@ -164,32 +132,39 @@
 								</div>
 							</div>
 						</div>		
-						
-					</div>	
-				';
+					';				
 			}
-		?>	
 		
-		<?php
-			if(isset($_POST['submit']))
+			if(isset($_POST['submit']) && isset($_SESSION['selected']))
 			{	
-				if(isset($_SESSION['adminUserName']))
-				{					
-					$FetchApplicationSQL="select pi.userId,pi.firstName,pi.lastName From registered_users as ru inner join personal_info as pi on pi.userId=ru.userId where ru.discipline='".$_POST['discipline']."' and ru.applicationSubmitStatus=1";
-					$result=mysql_query($FetchApplicationSQL);	
+				include("semester_database_connection.php");
+				sem_connection($_SESSION['dbName']);
+				
+				global $semDbConnection;
+				//echo $semDbConnection;
 
-					if($result)
+				$FetchApplicationSQL="select pi.userId,pi.firstName,pi.lastName From registered_users as ru inner join personal_info as pi on pi.userId=ru.userId where ru.discipline='".$_POST['discipline']."' and ru.applicationSubmitStatus=1";
+				$result=mysqli_query($semDbConnection,$FetchApplicationSQL);	
+
+				if($result)
+				{
+					$resultRows = mysqli_num_rows($result);
+					if($resultRows == 0)			
 					{
-						$resultRows = mysql_num_rows($result);
-						if($resultRows == 0)			
-						{
-							echo "<script>alert('no results')</script>";
-						}
-						else
-						{
-							echo '
-							<div class="panel panel-info content">
-								<div class="panel-heading center">Submitted Applications</div>
+						echo "<script>alert('no results')</script>";
+					}
+					else
+					{
+						echo '
+						<div class="panel panel-default">
+							<div class="panel-heading" role="tab" id="headingOne">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion" href="#second_step" aria-expanded="true" aria-controls="collapseOne">
+										Choose Course:
+									</a>
+								</h4>
+							</div>
+							<div id="second_step" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 								<div class="panel-body">	
 									<p class="col-md-offset-5 col-md-4">No. of Applications received:'. $resultRows.'</p>													
 									<table class="table table-striped  topMargin">
@@ -199,7 +174,7 @@
 											<td><strong>Full Name</strong></td>
 										</tr>';
 										$count=1;
-										while($array=mysql_fetch_array($result))
+										while($array=mysqli_fetch_array($result))
 										{
 											echo '<tr>
 											<td>'.$count.'</td>
@@ -211,18 +186,20 @@
 											$count++;
 										}
 										
-							echo '	</table>
-								</div>										
-							</div>
-							';
-						}
+									echo '</table>
+								</div>	
+							</div>									
+						</div>
+					</div>	
+					';
 					}
-					else
-					{
-						//query failed
-						echo mysql_error().'</ br>';
-					}
-				}				
+				}
+				else
+				{
+					//query failed
+					echo mysqli_error($semDbConnection).'</ br>';
+				}
+								
 			}			
 		?>			
 	</body>
