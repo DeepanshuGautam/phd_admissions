@@ -1,6 +1,11 @@
 <?php
 	session_start();
 	include('master_database_connection.php');
+
+	if(isset($_SESSION['adminUserName']))
+	{
+		echo "<script type='text/javascript'>window.location = 'adminHome.php';</script>";
+	}
 ?>
 
 <!DOCTYPE html>
@@ -137,6 +142,7 @@
 					</div>					
 				</div>			
 			</div>			
-		</form>		
+		</form>	
+		<?php include("footer.php");?>	
 	</body>
 </html>

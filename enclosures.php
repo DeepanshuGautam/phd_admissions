@@ -18,6 +18,13 @@
 		<link rel="stylesheet" type="text/css" href="align_css.css">
 	</head>
 	<body>
+		<?php
+			if(isset($_SESSION['adminUserName']))
+			{
+
+			include("adheader.php");
+		?>
+
 		<p class="topMargin"><h1><center>Application No: <?php echo $appNo; ?></center></h1></p>		
 		<?php include("print_close.php");?>
 		<ul class="nav nav-tabs content topMargin">
@@ -121,7 +128,13 @@
 			
 
 		?>					
-				
+		<?php 
+			}
+			else
+			{
+				echo "<script>window.location = 'logout_anomaly.php';</script>";
+			}			
+		?>	
 	</body>
 </html>
 	

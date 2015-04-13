@@ -19,8 +19,11 @@
 		<link rel="stylesheet" type="text/css" href="view_applicationsCSS.css">
 	</head>
 	<body id="body">
-		<?php include("adheader.php");?>
 		<?php
+			if(isset($_SESSION['adminUserName']))
+			{
+
+			include("adheader.php");
 			$_SESSION['pageName'] = "view_applications.php";
 			include("select_database.php");	
 		?>		
@@ -201,6 +204,13 @@
 					echo mysqli_error($semDbConnection).'</ br>';
 				}
 								
+			}			
+		?>	
+		<?php 
+			}
+			else
+			{
+				echo "<script>window.location = 'logout_anomaly.php';</script>";
 			}			
 		?>			
 	</body>

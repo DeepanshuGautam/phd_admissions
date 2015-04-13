@@ -23,9 +23,12 @@
 
 	</head>
 	<body id="body">
-		<?php include("adheader.php");?>
 		
 		<?php
+			if(isset($_SESSION['adminUserName']))
+			{
+
+			include("adheader.php");
 			$_SESSION['pageName'] = "set_criteria.php";
 			include("select_database.php");	
 		?>
@@ -443,7 +446,14 @@
 					}					
 				}	
 			?>			
-		</form>				
+		</form>	
+		<?php 
+			}
+			else
+			{
+				echo "<script>window.location = 'logout_anomaly.php';</script>";
+			}			
+		?>			
 	</body>	
 </html>
 <script type="text/javascript">
