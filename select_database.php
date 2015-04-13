@@ -20,7 +20,7 @@
 						}
 					?>
 					>
-					<button type="button" class="btn btn-default" onclick="dismiss()">Cancel</button></a>
+					<button type="button" class="btn btn-default" onclick="dismiss()" data-dismiss="modal">Cancel</button></a>
 					<button data-toggle="modal" data-target="#select" type="button" data-dismiss="modal" name="select_database" class="btn btn-primary">Select</button>
 				</div>
 			</div>
@@ -43,7 +43,7 @@
 						</div>
 						<div class="modal-body">
 			';						
-				echo "hello";
+				//echo "hello";
 				$query = "select dbName,year,semester from db_list where activeStatus = 1";						
 				$queryResult = mysqli_query($masterDbConnection,$query);
 				if($queryResult)
@@ -221,6 +221,7 @@
 <script type="text/javascript">
 	function dismiss()
 	{
+		//alert("hi");
 		$('#select_database').modal('hide');
 	}
 </script>

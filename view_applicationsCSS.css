@@ -17,7 +17,9 @@
 .requireTag{
 	color: red;
 }
-
+.collapseMargin{
+	margin-top: 10px;
+}
 .content{
 	margin-left: 10px;
 	margin-top: 20px;

@@ -41,14 +41,14 @@
 			</li> 
 			<?php
 				if(isset($_SESSION['selected']))
-				{
+				{					
 					echo "<li class='navbar-right'>
 							<a href='' data-toggle='modal' data-target='#select' style='color:black;";
 							if($_SESSION['activeStatus'] == 0)
 								echo "background-color:#ED6666;";
 							else
 								echo "background-color:#33CC33;";
-							echo "'>".$_SESSION['dbName']."</a>
+							echo "'>".$_SESSION['year']."(".$_SESSION['semester'].")</a>
 						</li>";					
 				}
 				else
@@ -57,7 +57,7 @@
 							<a href='' data-toggle='modal' data-target='#select' style='color:black;background-color:#FFFF99';>No DataBase Selected</a>
 						</li>";
 				}
-			?>  
+			?> 
 		</ul>		
 		
 		<?php
@@ -75,7 +75,7 @@
 							<div class="panel-heading" role="tab" id="headingOne">
 								<h4 class="panel-title">
 									<a data-toggle="collapse" data-parent="#accordion" href="#first_step" aria-expanded="true" aria-controls="collapseOne">
-										Choose Course:
+										Choose Discipline:
 									</a>
 								</h4>
 							</div>
@@ -123,7 +123,7 @@
 													</div>			
 
 													<div class="center extraMargin">
-														<button name="submit" type="submit" class="btn btn-block btn-success">Submit</button>	
+														<button  name="submit" type="submit" class="btn btn-block btn-success">Submit</button>	
 													</div>					
 												</div>											
 											</div>
@@ -134,7 +134,7 @@
 						</div>		
 					';				
 			}
-		
+
 			if(isset($_POST['submit']) && isset($_SESSION['selected']))
 			{	
 				include("semester_database_connection.php");
@@ -142,8 +142,8 @@
 				
 				global $semDbConnection;
 				//echo $semDbConnection;
-
-				$FetchApplicationSQL="select pi.userId,pi.firstName,pi.lastName From registered_users as ru inner join personal_info as pi on pi.userId=ru.userId where ru.discipline='".$_POST['discipline']."' and ru.applicationSubmitStatus=1";
+				//echo $_POST['discipline'];
+				$FetchApplicationSQL="select pi.userId,pi.firstName,pi.lastName From registered_users as ru inner join personal_info as pi on pi.userId=ru.userId where ru.discipline='".$_POST['discipline']."' and ru.applicationSubmitStatus = 1";
 				$result=mysqli_query($semDbConnection,$FetchApplicationSQL);	
 
 				if($result)
@@ -155,18 +155,19 @@
 					}
 					else
 					{
+						echo "<script>$('#first_step').collapse('hide');</script>";						
 						echo '
-						<div class="panel panel-default">
+						<div class="panel panel-default collapseMargin">
 							<div class="panel-heading" role="tab" id="headingOne">
 								<h4 class="panel-title">
 									<a data-toggle="collapse" data-parent="#accordion" href="#second_step" aria-expanded="true" aria-controls="collapseOne">
-										Choose Course:
+										Submitted Applications:
 									</a>
 								</h4>
 							</div>
 							<div id="second_step" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 								<div class="panel-body">	
-									<p class="col-md-offset-5 col-md-4">No. of Applications received:'. $resultRows.'</p>													
+									<p class="col-md-offset-5 col-md-4">Total no. of Applications received: '. $resultRows.'</p>													
 									<table class="table table-striped  topMargin">
 										<tr>
 											<td><strong>Sr. No.</strong></td>
@@ -206,6 +207,7 @@
 </html>
 
 <script type="text/javascript">
+
 	$("#modal_form").submit(function(e) {
 		//alert("hi");
 		

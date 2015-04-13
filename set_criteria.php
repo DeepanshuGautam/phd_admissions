@@ -46,14 +46,14 @@
 			</li>  
 			<?php
 				if(isset($_SESSION['selected']))
-				{
+				{					
 					echo "<li class='navbar-right'>
 							<a href='' data-toggle='modal' data-target='#select' style='color:black;";
 							if($_SESSION['activeStatus'] == 0)
 								echo "background-color:#ED6666;";
 							else
 								echo "background-color:#33CC33;";
-							echo "'>".$_SESSION['dbName']."</a>
+							echo "'>".$_SESSION['year']."(".$_SESSION['semester'].")</a>
 						</li>";					
 				}
 				else
@@ -77,7 +77,7 @@
 								<div class="panel-heading" role="tab" id="headingOne">
 									<h4 class="panel-title">
 										<a data-toggle="collapse" data-parent="#accordion" href="#first_step" aria-expanded="true" aria-controls="collapseOne">
-											Choose Course:
+											Choose Discipline:
 										</a>
 									</h4>
 								</div>
@@ -160,8 +160,10 @@
 						$min_age = $_POST['age'];	
 					}
 
+					echo "<script>$('#first_step').collapse('hide');</script>";
+
 					echo '
-					<div class="panel panel-default">
+					<div class="panel panel-default collapseMargin">
 						<div class="panel-heading" role="tab" id="headingOne">
 							<h4 class="panel-title">
 								<a data-toggle="collapse" data-parent="#accordion" href="#second_step" aria-expanded="true" aria-controls="collapseOne">
@@ -363,8 +365,7 @@
 							</div>
 						</div>
 					</div>
-					';
-				echo '</div';
+					';				
 				}
 
 				if(isset($_POST['submit_criteria']) && $reset_ug== 1 && $reset_pg ==1 && $reset_age == 1 && isset($_SESSION['adminUserName']))
@@ -384,43 +385,51 @@
 						else
 						{
 							echo '						
-								<div class="panel panel-info content">
-									<div class="panel-heading center">Shorlisted Applications</div>
-									<div class="panel-body">
-										<table class="table table-striped  topMargin">
-											<tr>
-												<td><strong>Sr. No.</strong></td>
-												<td><strong>Application No.</strong></td>
-												<td><strong>Full Name</strong></td>
-												<td><strong>Email-Id</strong></td>
-												<td><strong>Address for communication</strong></td>
-											</tr>';
-											$count = 1;
-											while($array = mysql_fetch_array($resultQuery))
-											{											
-												echo '<tr>
-													<td class="col-md-1">'.$count.'</td>
-													<td class="col-md-2"><a target="_blank" href=personal_info.php?app_no='.$array['userId'].
-														'>'.$array['userId'].'</a>
-													</td>
-													<td class="col-md-3">'.$array['firstName'].' '.$array['lastName'].'</td>
-													<td><a href="mailto:#">'.$array['emailAddress'].'</a></td>
-													<td class="col-md-6">
-														'.
-														$array['temp_address'].', '.
-														$array['temp_district'].', '.
-														$array['temp_state'].'-'.
-														$array['temp_picode']
-														.'
-													</td>
+								<div class="panel panel-default collapseMargin">
+									<div class="panel-heading" role="tab" id="headingOne">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#accordion" href="#third_step" aria-expanded="true" aria-controls="collapseOne">
+												Set Shorlisting Criteria:
+											</a>
+										</h4>
+									</div>
+									<div id="third_step" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">																															
+										<div class="panel-body">
+											<table class="table table-striped  topMargin">
+												<tr>
+													<td><strong>Sr. No.</strong></td>
+													<td><strong>Application No.</strong></td>
+													<td><strong>Full Name</strong></td>
+													<td><strong>Email-Id</strong></td>
+													<td><strong>Address for communication</strong></td>
 												</tr>';
-												$count++;
-											}
-										echo'
-										</table>
+												$count = 1;
+												while($array = mysql_fetch_array($resultQuery))
+												{											
+													echo '<tr>
+														<td class="col-md-1">'.$count.'</td>
+														<td class="col-md-2"><a target="_blank" href=personal_info.php?app_no='.$array['userId'].
+															'>'.$array['userId'].'</a>
+														</td>
+														<td class="col-md-3">'.$array['firstName'].' '.$array['lastName'].'</td>
+														<td><a href="mailto:#">'.$array['emailAddress'].'</a></td>
+														<td class="col-md-6">
+															'.
+															$array['temp_address'].', '.
+															$array['temp_district'].', '.
+															$array['temp_state'].'-'.
+															$array['temp_picode']
+															.'
+														</td>
+													</tr>';
+													$count++;
+												}
+											echo'
+											</table>
+										</div>
 									</div>
 								</div>
-							';
+							</div>';
 						}
 					}
 					else

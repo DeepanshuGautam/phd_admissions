@@ -41,11 +41,7 @@
 			{
 				$selectedStatus = -1;
 				$activeStatus = -1;
-			}
-
-			
-			$ovSm = "";
-									
+			}									
 
 			function done_modal($msg)
 			{

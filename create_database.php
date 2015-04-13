@@ -39,14 +39,14 @@
 			</li>  
 			<?php
 				if(isset($_SESSION['selected']))
-				{
+				{					
 					echo "<li class='navbar-right'>
 							<a href='' data-toggle='modal' data-target='#select' style='color:black;";
 							if($_SESSION['activeStatus'] == 0)
 								echo "background-color:#ED6666;";
 							else
 								echo "background-color:#33CC33;";
-							echo "'>".$_SESSION['dbName']."</a>
+							echo "'>".$_SESSION['year']."(".$_SESSION['semester'].")</a>
 						</li>";					
 				}
 				else
