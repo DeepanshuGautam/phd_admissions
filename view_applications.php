@@ -168,21 +168,21 @@
 							<div id="second_step" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 								<div class="panel-body">	
 									<p class="col-md-offset-5 col-md-4">Total no. of Applications received: '. $resultRows.'</p>													
-									<table class="table table-striped  topMargin">
+									<table class="table table-striped extraMargin">
 										<tr>
-											<td><strong>Sr. No.</strong></td>
-											<td><strong>Application No.</strong></td>
+											<td><strong><center>Sr. No.</center></strong></td>
+											<td><strong><center>Application No.</center></strong></td>
 											<td><strong>Full Name</strong></td>
 										</tr>';
 										$count=1;
 										while($array=mysqli_fetch_array($result))
 										{
 											echo '<tr>
-											<td>'.$count.'</td>
-											<td><a data-toggle="tooltip" data-placement="left" title="Show full details" target="_blank" href=personal_info.php?app_no='.$array['userId'].'
+											<td ><center>'.$count.'.</center></td>
+											<td ><a data-toggle="tooltip" data-placement="left" title="Show full details" target="_blank" href=personal_info.php?app_no='.$array['userId'].'
 												>
-												'.$array['userId'].'</a></td>
-											<td>'.$array['firstName']." ".$array['lastName'].'</td>
+												<center>'.$array['userId'].'</center></a></td>
+											<td >'.$array['firstName']." ".$array['lastName'].'</td>
 											</tr>';
 											$count++;
 										}

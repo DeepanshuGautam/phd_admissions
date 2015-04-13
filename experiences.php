@@ -25,9 +25,9 @@
 		</center>
 
 		<ul class="nav nav-tabs content topMargin">
-			<li role="presentation" class="active"><a href="personal_info.php?app_no=<?php echo $appNo;?>">Personal Info</a></li>	
+			<li role="presentation"><a href="personal_info.php?app_no=<?php echo $appNo;?>">Personal Info</a></li>	
 			<li role="presentation"><a href="academic_info.php?app_no=<?php echo $appNo;?>">Academic Info</a></li>	
-			<li role="presentation"><a href="experiences.php?app_no=<?php echo $appNo;?>">Experiences</a></li>	
+			<li role="presentation" class="active"><a href="experiences.php?app_no=<?php echo $appNo;?>">Experiences</a></li>	
 			<li role="presentation"><a href="enclosures.php?app_no=<?php echo $appNo;?>">Enclosures</a></li>	
 		</ul>		
 		

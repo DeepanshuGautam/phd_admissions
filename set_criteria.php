@@ -371,6 +371,7 @@
 				if(isset($_POST['submit_criteria']) && $reset_ug== 1 && $reset_pg ==1 && $reset_age == 1 && isset($_SESSION['adminUserName']))
 				{		
 
+					echo "<script>$('#second_step').collapse('hide');</script>";
 					//global $ug_min_cgpa,$ug_min_percentage,$pg_min_cgpa,$pg_min_percentage,$age;
 					include("semester_database_connection.php");
 					sem_connection($_SESSION['dbName']);
@@ -393,7 +394,7 @@
 									<div class="panel-heading" role="tab" id="headingOne">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#accordion" href="#third_step" aria-expanded="true" aria-controls="collapseOne">
-												Set Shorlisting Criteria:
+												Shorlisted Applications:
 											</a>
 										</h4>
 									</div>
@@ -401,8 +402,8 @@
 										<div class="panel-body">
 											<table class="table table-striped  topMargin">
 												<tr>
-													<td><strong>Sr. No.</strong></td>
-													<td><strong>Apln. No.</strong></td>
+													<td><strong><center>Sr. No.</center></strong></td>
+													<td><strong><center>Apln. No.</center></strong></td>
 													<td><strong>Full Name</strong></td>
 													<td><strong>Email-Id</strong></td>
 													<td><strong>Address for communication</strong></td>
@@ -411,9 +412,9 @@
 												while($array = mysqli_fetch_array($resultQuery))
 												{											
 													echo '<tr>
-														<td class="col-md-1">'.$count.'</td>
+														<td class="col-md-1"><center>'.$count.'.</center></td>
 														<td class="col-md-1"><a target="_blank" href=personal_info.php?app_no='.$array['userId'].
-															'>'.$array['userId'].'</a>
+															'><center>'.$array['userId'].'</center></a>
 														</td>
 														<td class="col-md-3">'.$array['firstName'].' '.$array['lastName'].'</td>
 														<td class="col-md-3"><a href="mailto:#">'.$array['emailAddress'].'</a></td>

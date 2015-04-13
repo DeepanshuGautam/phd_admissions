@@ -22,41 +22,7 @@
 			$_SESSION['pageName'] = "create_database.php";
 			include("select_database.php");	
 		?>
-		<ul class="nav nav-tabs content">
-			<li role="presentation"><a href="adminHome.php">Home</a></li>
-			<li role="presentation"><a href="set_criteria.php">Set Criteria</a></li>
-			<li role="presentation"><a href="view_applications.php">View Applications</a></li>
-			<li role="presentation" class="active"><a href="create_database.php">Create Database</a></li>
-			<li class="navbar-right" role="presentation" class="dropdown">
-				<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-					Settings <span class="caret"></span>
-				</a>
-				<ul class="dropdown-menu" role="menu">		
-					<li><a data-toggle="modal" data-target="#select">Change Database</a></li>			
-			 		<li><a href="change_password.php">Change Password</a></li>		
-			 		<li><a href="log_out.php">Log Out</a></li>
-				</ul>
-			</li>  
-			<?php
-				if(isset($_SESSION['selected']))
-				{					
-					echo "<li class='navbar-right'>
-							<a href='' data-toggle='modal' data-target='#select' style='color:black;";
-							if($_SESSION['activeStatus'] == 0)
-								echo "background-color:#ED6666;";
-							else
-								echo "background-color:#33CC33;";
-							echo "'>".$_SESSION['year']."(".$_SESSION['semester'].")</a>
-						</li>";					
-				}
-				else
-				{
-					echo "<li class='navbar-right' role='presentation'>
-							<a href='' data-toggle='modal' data-target='#select' style='color:black;background-color:#FFFF99';>No DataBase Selected</a>
-						</li>";
-				}
-			?> 
-		</ul>	
+			
 
 		
 
@@ -316,6 +282,11 @@
 															{
 																//echo "registeres_users table created successfully";
 																$done = 1;
+																$_SESSION['year'] = $year;
+																$_SESSION['semester'] = $sm;
+																$_SESSION['activeStatus'] = 0;
+																$_SESSION['dbName'] = $database;
+																$_SESSION['selected'] = $database;
 																alert_modal("Database of $sm semester of the year $year has been created successfully");
 															}
 															else
@@ -373,39 +344,78 @@
 			}
 		?>
 
-		<form class="col-md-offset-4 col-md-4 topMargin" method="post" action="create_database.php">
-			<div class="panel panel-info">					
-				<div class="panel-heading center">Create Database</div>
-				<div class="panel-body">										
-					<p class="requireTag">*require fields</p>
-					<div class="form-group betweenMargin">
-						<div class="row">
-							<label class="col-md-3">Year*</label>																		
+		<form method="post" action="create_database.php">
+			<ul class="nav nav-tabs content">
+				<li role="presentation"><a href="adminHome.php">Home</a></li>
+				<li role="presentation"><a href="set_criteria.php">Set Criteria</a></li>
+				<li role="presentation"><a href="view_applications.php">View Applications</a></li>
+				<li role="presentation" class="active"><a href="create_database.php">Create Database</a></li>
+				<li class="navbar-right" role="presentation" class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+						Settings <span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu" role="menu">		
+						<li><a data-toggle="modal" data-target="#select">Change Database</a></li>			
+				 		<li><a href="change_password.php">Change Password</a></li>		
+				 		<li><a href="log_out.php">Log Out</a></li>
+					</ul>
+				</li>  
+				<?php
+					if(isset($_SESSION['selected']))
+					{					
+						echo "<li class='navbar-right'>
+								<a href='' data-toggle='modal' data-target='#select' style='color:black;";
+								if($_SESSION['activeStatus'] == 0)
+									echo "background-color:#ED6666;";
+								else
+									echo "background-color:#33CC33;";
+								echo "'>".$_SESSION['year']."(".$_SESSION['semester'].")</a>
+							</li>";					
+					}
+					else
+					{
+						echo "<li class='navbar-right' role='presentation'>
+								<a href='' data-toggle='modal' data-target='#select' style='color:black;background-color:#FFFF99';>No DataBase Selected</a>
+							</li>";
+					}
+				?> 
+			</ul>
+
+			<div class="col-md-offset-4 col-md-4 topMargin">
+				<div class="panel panel-info">					
+					<div class="panel-heading center">Create Database</div>
+					<div class="panel-body">										
+						<p class="requireTag">*require fields</p>
+						<div class="form-group betweenMargin">
+							<div class="row">
+								<label class="col-md-3">Year*</label>																		
+							</div>
+							<input id="year" name="year" type="text" class="form-control" placeholder="Year"
+								value=
+									<?php
+										if(isset($_POST['submit']) && $done != 1)
+										{										
+											echo $year;	
+										} 
+									?>							
+							>
 						</div>
-						<input id="year" name="year" type="text" class="form-control" placeholder="Year"
-							value=
-								<?php
-									if(isset($_POST['submit']) && $done != 1)
-									{										
-										echo $year;	
-									} 
-								?>							
-						>
-					</div>
-					<div class="form-group topMargin">
-						<div class="row">
-							<label class="col-md-3">Semester*</label>												
-						</div>
-						<select id='semester' name='semester' class='discipline_options form-control'>
-							<option value=1 <?php if(isset($_POST['submit']) && $done != 1) if($semester == 1) echo "selected";?> >Even(E)</option>
-							<option value=0 <?php if(isset($_POST['submit']) && $done != 1) if($semester == 0) echo "selected";?> >Odd(O)</option>											
-						</select>
-					</div>														
-					<div class="center topMargin">
-						<button name="submit" type="submit" class="btn btn-block btn-success">Create</button>	
+						<div class="form-group topMargin">
+							<div class="row">
+								<label class="col-md-3">Semester*</label>												
+							</div>
+							<select id='semester' name='semester' class='discipline_options form-control'>
+								<option value=1 <?php if(isset($_POST['submit']) && $done != 1) if($semester == 1) echo "selected";?> >Even(E)</option>
+								<option value=0 <?php if(isset($_POST['submit']) && $done != 1) if($semester == 0) echo "selected";?> >Odd(O)</option>											
+							</select>
+						</div>														
+						<div class="center topMargin">
+							<button name="submit" type="submit" class="btn btn-block btn-success">Create</button>	
+						</div>	
 					</div>	
 				</div>	
-			</div>			
+			</div>
+					
 		</form>	
 	</body>
 </html>
