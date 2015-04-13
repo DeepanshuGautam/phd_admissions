@@ -372,12 +372,16 @@
 				{		
 
 					//global $ug_min_cgpa,$ug_min_percentage,$pg_min_cgpa,$pg_min_percentage,$age;
+					include("semester_database_connection.php");
+					sem_connection($_SESSION['dbName']);
 					
-					$query = "select ru.userId,ru.firstName,ru.lastName,ru.emailAddress,pi.temp_address,pi.temp_district,pi.temp_state,pi.temp_pincode from registered_users as ru inner join personal_info as pi on pi.userId=ru.userId  where discipline='".$discipline."' and ";
-					$resultQuery = mysql_query($query);
+					global $semDbConnection;
+
+					$query = "select ru.userId,pi.firstName,pi.lastName,ru.emailAddress,pi.currentAddress,pi.currentDistrict,pi.currentState,pi.currentPincode from registered_users as ru inner join personal_info as pi on pi.userId=ru.userId  where discipline='".$discipline."'";
+					$resultQuery = mysqli_query($semDbConnection,$query);
 					if($resultQuery)
 					{
-						$resultRows = mysql_num_rows($resultQuery);
+						$resultRows = mysqli_num_rows($resultQuery);
 						if($resultRows == 0)
 						{
 							echo "<script>alert('no results!')</script>";
@@ -398,27 +402,27 @@
 											<table class="table table-striped  topMargin">
 												<tr>
 													<td><strong>Sr. No.</strong></td>
-													<td><strong>Application No.</strong></td>
+													<td><strong>Apln. No.</strong></td>
 													<td><strong>Full Name</strong></td>
 													<td><strong>Email-Id</strong></td>
 													<td><strong>Address for communication</strong></td>
 												</tr>';
 												$count = 1;
-												while($array = mysql_fetch_array($resultQuery))
+												while($array = mysqli_fetch_array($resultQuery))
 												{											
 													echo '<tr>
 														<td class="col-md-1">'.$count.'</td>
-														<td class="col-md-2"><a target="_blank" href=personal_info.php?app_no='.$array['userId'].
+														<td class="col-md-1"><a target="_blank" href=personal_info.php?app_no='.$array['userId'].
 															'>'.$array['userId'].'</a>
 														</td>
 														<td class="col-md-3">'.$array['firstName'].' '.$array['lastName'].'</td>
-														<td><a href="mailto:#">'.$array['emailAddress'].'</a></td>
-														<td class="col-md-6">
+														<td class="col-md-3"><a href="mailto:#">'.$array['emailAddress'].'</a></td>
+														<td class="col-md-4">
 															'.
-															$array['temp_address'].', '.
-															$array['temp_district'].', '.
-															$array['temp_state'].'-'.
-															$array['temp_picode']
+															$array['currentAddress'].', '.
+															$array['currentDistrict'].', '.
+															$array['currentState'].'-'.
+															$array['currentPincode']
 															.'
 														</td>
 													</tr>';
@@ -434,7 +438,7 @@
 					}
 					else
 					{
-						echo mysql_error();
+						echo mysqli_error($semDbConnection);
 					}					
 				}	
 			?>			
