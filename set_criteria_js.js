@@ -5,7 +5,7 @@ $(document).ready(function(){
 
 		if(cgpaValue != ""){
 			//alert(cgpaValue);
-			check_cgpa(cgpaValue);	
+			//check_cgpa(cgpaValue);	
 		}		
 	})
 });

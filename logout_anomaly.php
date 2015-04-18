@@ -21,8 +21,22 @@
 	<body>
 		<?php
 			include("adLoginHeader.php");
-							
-			
+		?>
+			<div class="col-md-offset-4 col-md-4 superExtraMargin">			
+				<div class="panel panel-info">					
+					<div class="panel-heading center">ERROR</div>
+					<div class="panel-body">					
+						<div class="form-group betweenMargin">
+							<div class="row">
+								<center><label>ACCESS DENIED</label></center>
+							</div>	
+							<div class="row">
+								<label class="col-md-offset-4">You are logged out</label>
+							</div>								
+					</div>			
+				</div>	
+			</div>				
+		<?php
 			include("footer.php");
 
 			header('refresh:2,url=adminLogin.php');

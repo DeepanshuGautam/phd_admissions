@@ -1,6 +1,6 @@
 <?php
 	session_start();	
-	include('master_database_connection.php');
+	include('master_database_connection.php');	
 	if(isset($_SESSION['adminUserName']))
 		$adminName = $_SESSION['adminUserName'];
 	else	
