@@ -30,14 +30,7 @@
 			<li role="presentation" class="active"><a href="academic_info.php?app_no=<?php echo $appNo;?>">Academic Info</a></li>	
 			<li role="presentation"><a href="experiences.php?app_no=<?php echo $appNo;?>">Experiences</a></li>	
 			<li role="presentation"><a href="enclosures.php?app_no=<?php echo $appNo;?>">Enclosures</a></li>	
-		</ul>		
-	
-		<div class="topMargin content" >															
-			<p class="col-md-6"><strong>Full Name</strong></p>
-			<p class="col-md-6">Deepanshu Gautam</p>
-			<p class="col-md-6"><strong>Gender</strong></p>
-			<p class="col-md-6">Male</p>
-		</div>					
+		</ul>							
 		
 		<?php
 			include("semester_database_connection.php");
@@ -50,73 +43,190 @@
 			if($queryResult)
 			{
 				$array = mysqli_fetch_array($queryResult);
-				
-				echo '
-					<div class="topMargin content" >															
-						<p class="col-md-6"><strong>Full Name</strong></p>
-						<p class="col-md-6">'.$array['firstName'].' '.$array['lastName'].'</p>
-
-						<p class="col-md-6"><strong>Gender</strong></p>
-						<p class="col-md-6">'.$array['gender'].'</p>
-
-						<p class="col-md-6"><strong>Date Of Birth</strong></p>	
-						<p class="col-md-6">'.$array['dob'].'</p>
-
-						<p class="col-md-6"><strong>Father\'s Name</strong></p>  	
-						<p class="col-md-6">'.$array['fatherName'].'</p>
-
-						<p class="col-md-6"><strong>Nationality</strong></p>  	
-						<p class="col-md-6">'.$array['nationality'].'</p>
-
-						<p class="col-md-6"><strong>Marital Status</strong></p>  	
-						<p class="col-md-6">'.$array['maritalStatus'].'</p>
-
-						<p class="col-md-6"><strong>Physically Challenged</strong></p> 	
-						<p class="col-md-6"></p>
-
-						<p class="col-md-6"><strong>Community</strong></p>  	
-						<p class="col-md-6">'.$array['community'].'</p>
-
-						<p class="col-md-6"><strong>Personal Email-ID</strong></p>  	
-						<p class="col-md-6">'.$array['primaryEmail'].'</p>
-
-						<p class="col-md-6"><strong>Alternate Email-ID</strong></p>  	
-						<p class="col-md-6">'.$array['alternateEmail'].'</p>
-
-						<p class="col-md-12 topMargin"><strong><ins>Present Address</ins></strong></p>			  	
-						<p class="col-md-6"><strong>Address</strong></p> 	
-						<p class="col-md-6">'.$array['currentAddress'].'</p>
-
-						<p class="col-md-6"><strong>District/City</strong></p>  	
-						<p class="col-md-6">'.$array['currentDistrict'].'</p>
-
-						<p class="col-md-6"><strong>State/UT</strong></p>  	
-						<p class="col-md-6">'.$array['currentState'].'</p>
-
-						<p class="col-md-6"><strong>Pincode</strong></p>  	
-						<p class="col-md-6">'.$array['currentPincode'].'</p>
-
-						<p class="col-md-6"><strong>Mobile</strong></p>			    	
-						<p class="col-md-6">'.$array['mobileNumber'].'</p>
-
-						<p class="col-md-12 topMargin"><strong><ins>Permanent Address</ins></strong></p>			  	
-						<p class="col-md-6"><strong>Address</strong></p>  	
-						<p class="col-md-6">'.$array['permanentAddress'].'</p>
-
-						<p class="col-md-6"><strong>District/City</strong></p>  	
-						<p class="col-md-6">'.$array['permanentDistrict'].'</p>
-
-						<p class="col-md-6"><strong>State/UT</strong></p>  	
-						<p class="col-md-6">'.$array['permanentState'].'</p>
-
-						<p class="col-md-6"><strong>Pincode</strong></p>  	
-						<p class="col-md-6">'.$array['permanentPincode'].'</p>						
-
-						<p class="col-md-6"><strong>Mobile</strong></p>  
-						<p class="col-md-6">'.$array['alternateMobileNumber'].'</p>
-
+				?>
+				<div class=" col-md-4 col-md-offset-1 topMargin">
+					<div class="panel panel-info">					
+						<div class="panel-heading center">Class: 10</div>
+						<div class="panel-body">						
+							<div class="form-group betweenMargin">
+								<div class="row">
+									<label class="col-md-4">Institute Name</label>
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['10_instituteName']; ?></p>	
+								</div>															
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Degree Name</label>	
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['10_degreeName']; ?></p>						
+								</div>							
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Grade Format</label>
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['10_gradeFormat']; ?></p>							
+								</div>							
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Aggregate</label>
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['10_aggregate']; ?></p>							
+								</div>							
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Year of Passing</label>	
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['10_yearOfPassing']; ?></p>						
+								</div>							
+							</div>																	
+						</div>			
 					</div>	
-				';
+				</div>
+				<div class=" col-md-4 col-md-offset-1 topMargin">
+					<div class="panel panel-info">					
+						<div class="panel-heading center">Class: 12</div>
+						<div class="panel-body">						
+							<div class="form-group betweenMargin">
+								<div class="row">
+									<label class="col-md-4">Institute Name</label>
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['12_instituteName']; ?></p>	
+								</div>															
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Degree Name</label>	
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['12_degreeName']; ?></p>						
+								</div>							
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Grade Format</label>
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['12_gradeFormat']; ?></p>							
+								</div>							
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Aggregate</label>
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['12_aggregate']; ?></p>							
+								</div>							
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Year of Passing</label>	
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['12_yearOfPassing']; ?></p>						
+								</div>							
+							</div>																	
+						</div>			
+					</div>	
+				</div>	
+				<div class=" col-md-4 col-md-offset-1 topMargin">
+					<div class="panel panel-info">					
+						<div class="panel-heading center">Under Graduate(UG)</div>
+						<div class="panel-body">						
+							<div class="form-group betweenMargin">
+								<div class="row">
+									<label class="col-md-4">University/Institute Name</label>
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['ug_instituteName']; ?></p>	
+								</div>															
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Degree Name</label>	
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['ug_degreeName']; ?></p>						
+								</div>							
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Discipline</label>	
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['ug_discipline']; ?></p>						
+								</div>							
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Grade Format</label>
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['ug_gradeFormat']; ?></p>							
+								</div>							
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Aggregate</label>
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['ug_aggregate']; ?></p>							
+								</div>							
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Year of Passing</label>	
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['ug_yearOfPassing']; ?></p>						
+								</div>							
+							</div>																	
+						</div>			
+					</div>	
+				</div>	
+				<div class=" col-md-4 col-md-offset-1 topMargin">
+					<div class="panel panel-info">					
+						<div class="panel-heading center">Post Graduate(PG)</div>
+						<div class="panel-body">						
+							<div class="form-group betweenMargin">
+								<div class="row">
+									<label class="col-md-4">University/Institute Name</label>
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['pg_instituteName']; ?></p>	
+								</div>															
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Degree Name</label>	
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['pg_degreeName']; ?></p>						
+								</div>							
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Discipline</label>	
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['pg_discipline']; ?></p>						
+								</div>							
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Grade Format</label>
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['pg_gradeFormat']; ?></p>							
+								</div>							
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Aggregate</label>
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['pg_aggregate']; ?></p>							
+								</div>							
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<label class="col-md-4">Year of Passing</label>	
+									<p class="col-md-1">:</p>
+									<p class="col-md-4"><?php echo $array['pg_yearOfPassing']; ?></p>						
+								</div>							
+							</div>																	
+						</div>		
+					</div>	
+				</div>		
+			<?php
 			}
 			else
 			{

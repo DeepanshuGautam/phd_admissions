@@ -154,7 +154,7 @@
 					$resultRows = mysqli_num_rows($result);
 					if($resultRows == 0)			
 					{
-						echo "<script>alert('no results')</script>";
+						echo "<script>alert('No application Submitted')</script>";
 					}
 					else
 					{

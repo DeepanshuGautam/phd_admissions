@@ -37,95 +37,29 @@
 			sem_connection($_SESSION['dbName']);
 			
 			global $semDbConnection;
-
-			$query = "select * from personal_info where userId = ".$appNo;
-			$queryResult = mysqli_query($semDbConnection,$query);
-			if($queryResult)
-			{
-				$array = mysqli_fetch_array($queryResult);
-				if($array['physicallyChallenged'] == 0)
-				{
-					$pd = "No";
-				}
-				else
-				{
-					$pd = "Yes";
-				}
-
-				echo '
-					<div class="topMargin content" >															
-						<p class="col-md-6"><strong>Full Name</strong></p>
-						<p class="col-md-6">'.$array['firstName'].' '.$array['lastName'].'</p>
-
-						<p class="col-md-6"><strong>Gender</strong></p>
-						<p class="col-md-6">'.$array['gender'].'</p>
-
-						<p class="col-md-6"><strong>Date Of Birth</strong></p>	
-						<p class="col-md-6">'.$array['dob'].'</p>
-
-						<p class="col-md-6"><strong>Father\'s Name</strong></p>  	
-						<p class="col-md-6">'.$array['fatherName'].'</p>
-
-						<p class="col-md-6"><strong>Nationality</strong></p>  	
-						<p class="col-md-6">'.$array['nationality'].'</p>
-
-						<p class="col-md-6"><strong>Marital Status</strong></p>  	
-						<p class="col-md-6">'.$array['maritalStatus'].'</p>
-
-						<p class="col-md-6"><strong>Physically Challenged</strong></p> 	
-						<p class="col-md-6">'.$pd.'</p>
-
-						<p class="col-md-6"><strong>Community</strong></p>  	
-						<p class="col-md-6">'.$array['community'].'</p>
-
-						<p class="col-md-6"><strong>Personal Email-ID</strong></p>  	
-						<p class="col-md-6">'.$array['primaryEmail'].'</p>
-
-						<p class="col-md-6"><strong>Alternate Email-ID</strong></p>  	
-						<p class="col-md-6">'.$array['alternateEmail'].'</p>
-
-						<p class="col-md-12 topMargin"><strong><ins>Present Address</ins></strong></p>			  	
-						<p class="col-md-6"><strong>Address</strong></p> 	
-						<p class="col-md-6">'.$array['currentAddress'].'</p>
-
-						<p class="col-md-6"><strong>District/City</strong></p>  	
-						<p class="col-md-6">'.$array['currentDistrict'].'</p>
-
-						<p class="col-md-6"><strong>State/UT</strong></p>  	
-						<p class="col-md-6">'.$array['currentState'].'</p>
-
-						<p class="col-md-6"><strong>Pincode</strong></p>  	
-						<p class="col-md-6">'.$array['currentPincode'].'</p>
-
-						<p class="col-md-6"><strong>Mobile</strong></p>			    	
-						<p class="col-md-6">'.$array['mobileNumber'].'</p>
-
-						<p class="col-md-12 topMargin"><strong><ins>Permanent Address</ins></strong></p>			  	
-						<p class="col-md-6"><strong>Address</strong></p>  	
-						<p class="col-md-6">'.$array['permanentAddress'].'</p>
-
-						<p class="col-md-6"><strong>District/City</strong></p>  	
-						<p class="col-md-6">'.$array['permanentDistrict'].'</p>
-
-						<p class="col-md-6"><strong>State/UT</strong></p>  	
-						<p class="col-md-6">'.$array['permanentState'].'</p>
-
-						<p class="col-md-6"><strong>Pincode</strong></p>  	
-						<p class="col-md-6">'.$array['permanentPincode'].'</p>						
-
-						<p class="col-md-6"><strong>Mobile</strong></p>  
-						<p class="col-md-6">'.$array['alternateMobileNumber'].'</p>
-
-					</div>	
-				';
-			}
-			else
-			{
-				echo mysql_error($semDbConnection);
-			}
-			
-
-		?>					
+			?>
+			<div class=" col-md-4 col-md-offset-4 topMargin">
+				<div class="panel panel-info">					
+					<div class="panel-heading center">Profile Picture</div>
+					<div class="panel-body">						
+						<div class="form-group betweenMargin">
+							<div class="row">
+										
+							<?php					
+								if(file_exists("upload/".$appNo."_PP.jpg"))
+								{
+									echo "<img src='upload/".$appNo."_PP.jpg'";
+								}
+							 	else
+							 	{
+							 		echo "<p class='text-center'>No picture found!</p>";
+							 	}
+							?>	
+							</div>							
+						</div>																	
+					</div>			
+				</div>	
+			</div>				
 		<?php 
 			}
 			else

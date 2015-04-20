@@ -1,6 +1,7 @@
 <?php
 	session_start();
 	include('master_database_connection.php');	
+	$_SESSION['exists_criteria'] = -1;
 ?>
 <!DOCTYPE>
 <html>
@@ -143,8 +144,7 @@
 
 			<?php
 				if(isset($_POST['submit']) || isset($_POST['submit_criteria']))
-				{
-					
+				{					
 					$discipline = $_POST['discipline'];
 
 					
@@ -169,7 +169,7 @@
 							$e_pg_min_cpi4 = $array['pg_cpi4'];
 							$e_pg_min_cpi8 = $array['pg_cpi8'];
 							
-							$min_age = $array['age'];
+							$e_min_age = $array['age'];
 
 						}
 					}
@@ -185,19 +185,19 @@
 						$reset_pg = -1;
 						$reset_age = -1;
 
-						$stream = $_POST['discipline'];		
+						$stream = trim($_POST['discipline']);		
 
-						$ug_min_cgpa = $_POST['ug_min_cgpa'];						
-						$ug_min_percentage = $_POST['ug_min_percentage'];					
-						$ug_min_cpi4 = $_POST['ug_min_cpi4'];
-						$ug_min_cpi8 = $_POST['ug_min_cpi8'];
+						$ug_min_cgpa = trim($_POST['ug_min_cgpa']);			
+						$ug_min_percentage = trim($_POST['ug_min_percentage']);		
+						$ug_min_cpi4 = trim($_POST['ug_min_cpi4']);
+						$ug_min_cpi8 = trim($_POST['ug_min_cpi8']);
 
-						$pg_min_percentage = $_POST['pg_min_percentage'];
-						$pg_min_cgpa = $_POST['pg_min_cgpa'];
-						$pg_min_cpi4 = $_POST['pg_min_cpi4'];
-						$pg_min_cpi8 = $_POST['pg_min_cpi8'];
+						$pg_min_percentage = trim($_POST['pg_min_percentage']);
+						$pg_min_cgpa = trim($_POST['pg_min_cgpa']);
+						$pg_min_cpi4 = trim($_POST['pg_min_cpi4']);
+						$pg_min_cpi8 = trim($_POST['pg_min_cpi8']);
 						
-						$min_age = $_POST['age'];	
+						$min_age = trim($_POST['age']);	
 					}
 
 					echo "<script>$('#first_step').collapse('hide');</script>";
@@ -226,12 +226,12 @@
 												value=';
 												if(isset($_POST['submit_criteria']))
 												{
-													if(!empty(trim($ug_min_cgpa)))
+													if(!empty($ug_min_cgpa))
 													{
 														echo $ug_min_cgpa;
 													}													
 												}
-												if(isset($_POST['submit']))
+												if(isset($_POST['submit']) && $_SESSION['exists_criteria'] == 1)
 												{
 													echo $e_ug_min_cgpa;
 												}
@@ -245,12 +245,12 @@
 												value=';
 												if(isset($_POST['submit_criteria']))
 												{
-													if(!empty(trim($ug_min_percentage)))
+													if(!empty($ug_min_percentage))
 													{
 														echo $ug_min_percentage;
 													}												
 												}
-												if(isset($_POST['submit']))
+												if(isset($_POST['submit'])&& $_SESSION['exists_criteria'] == 1)
 												{
 													echo $e_ug_min_percentage;
 												}
@@ -260,16 +260,16 @@
 												<div class="row">
 													<label class="col-md-6">Minimum CPI-4*</label>												
 												</div>											
-												<input name="ug_min_cpi4" class="form-control" placeholder="Percentage"
+												<input name="ug_min_cpi4" class="form-control" placeholder="CPI-4"
 												value=';
 												if(isset($_POST['submit_criteria']))
 												{
-													if(!empty(trim($ug_min_cpi4)))
+													if(!empty($ug_min_cpi4))
 													{
 														echo $ug_min_cpi4;
 													}													
 												}
-												if(isset($_POST['submit']))
+												if(isset($_POST['submit'])&& $_SESSION['exists_criteria'] == 1)
 												{
 													echo $e_ug_min_cpi4;
 												}
@@ -279,16 +279,16 @@
 												<div class="row">
 													<label class="col-md-6">Minimum CPI-8*</label>												
 												</div>											
-												<input name="ug_min_cpi8" class="form-control" placeholder="Percentage"
+												<input name="ug_min_cpi8" class="form-control" placeholder="CPI-8"
 												value=';
 												if(isset($_POST['submit_criteria']))
 												{
-													if(!empty(trim($ug_min_cpi8)))
+													if(!empty($ug_min_cpi8))
 													{
 														echo $ug_min_cpi8;
 													}													
 												}
-												if(isset($_POST['submit']))
+												if(isset($_POST['submit'])&& $_SESSION['exists_criteria'] == 1)
 												{
 													echo $e_ug_min_cpi8;
 												}
@@ -299,7 +299,7 @@
 									';
 										if(isset($_POST['submit_criteria']))
 										{
-											if(empty(trim($ug_min_cgpa)) || empty(trim($ug_min_percentage)) || empty(trim($ug_min_cpi4)) || empty(trim($ug_min_cpi8)))									
+											if(empty($ug_min_cgpa) || empty($ug_min_percentage) || empty($ug_min_cpi4) || empty($ug_min_cpi8))									
 											{
 												echo "<div class='alert alert-danger' role='alert'>
 													<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
@@ -308,7 +308,57 @@
 
 													Fill the empty fields!
 													</div>";
-											}										
+											}	
+											else if ($ug_min_cgpa <=0 || $ug_min_percentage <=0 || $ug_min_cpi4 <=0 || $ug_min_cpi8 <=0)
+											{
+												echo "<div class='alert alert-danger' role='alert'>
+													<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+													<span class='sr-only'>Error:</span>
+
+
+													Fields cannot be negative or zero!
+													</div>";												
+											}
+											else if($ug_min_cgpa >10 )
+											{
+												echo "<div class='alert alert-danger' role='alert'>
+													<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+													<span class='sr-only'>Error:</span>
+
+
+													Enter valid cgpa!
+													</div>";
+											}
+											if($ug_min_percentage >100 )
+											{
+												echo "<div class='alert alert-danger' role='alert'>
+													<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+													<span class='sr-only'>Error:</span>
+
+
+													Enter valid percentage!
+													</div>";
+											}
+											else if($ug_min_cpi4 >4 )
+											{
+												echo "<div class='alert alert-danger' role='alert'>
+													<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+													<span class='sr-only'>Error:</span>
+
+
+													Enter valid cpi-4 value!
+													</div>";
+											}
+											else if($ug_min_cpi8 >8 )
+											{
+												echo "<div class='alert alert-danger' role='alert'>
+													<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+													<span class='sr-only'>Error:</span>
+
+
+													Enter valid cpi-8 value!
+													</div>";
+											}
 											else
 											{
 												$reset_ug = 1;
@@ -333,7 +383,7 @@
 														echo $pg_min_cgpa;
 													}													
 												}
-												if(isset($_POST['submit']))
+												if(isset($_POST['submit'])&& $_SESSION['exists_criteria'] == 1)
 												{
 													echo $e_pg_min_cgpa;
 												}
@@ -353,7 +403,7 @@
 														echo $pg_min_percentage;
 													}													
 												}
-												if(isset($_POST['submit']))
+												if(isset($_POST['submit'])&& $_SESSION['exists_criteria'] == 1)
 												{
 													echo $e_pg_min_percentage;
 												}
@@ -364,7 +414,7 @@
 													<label class="col-md-6">Minimum CPI-4*</label>
 													<label class="col-md-6"></label>
 												</div>
-												<input name="pg_min_cpi4" class="form-control" placeholder="Percentage"
+												<input name="pg_min_cpi4" class="form-control" placeholder="CPI-4"
 												value=';
 												if(isset($_POST['submit_criteria']))
 												{
@@ -373,7 +423,7 @@
 														echo $pg_min_cpi4;
 													}												
 												}
-												if(isset($_POST['submit']))
+												if(isset($_POST['submit'])&& $_SESSION['exists_criteria'] == 1)
 												{
 													echo $e_pg_min_cpi4;
 												}
@@ -384,7 +434,7 @@
 													<label class="col-md-6">Minimum CPI-8*</label>
 													<label class="col-md-6"></label>
 												</div>
-												<input name="pg_min_cpi8" class="form-control" placeholder="Percentage"
+												<input name="pg_min_cpi8" class="form-control" placeholder="CPI-8"
 												value=';
 												if(isset($_POST['submit_criteria']))
 												{
@@ -393,7 +443,7 @@
 														echo $pg_min_cpi8;
 													}												
 												}
-												if(isset($_POST['submit']))
+												if(isset($_POST['submit'])&& $_SESSION['exists_criteria'] == 1)
 												{
 													echo $e_pg_min_cpi8;
 												}
@@ -413,7 +463,57 @@
 
 													Fill the empty fields!
 													</div>";
-											}												
+											}	
+											else if ($pg_min_cgpa <=0 || $pg_min_percentage <=0 || $pg_min_cpi4 <=0 || $pg_min_cpi8 <=0)
+											{
+												echo "<div class='alert alert-danger' role='alert'>
+													<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+													<span class='sr-only'>Error:</span>
+
+
+													Fields cannot be negative or zero!
+													</div>";												
+											}
+											else if($pg_min_cgpa >10 )
+											{
+												echo "<div class='alert alert-danger' role='alert'>
+													<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+													<span class='sr-only'>Error:</span>
+
+
+													Enter valid cgpa!
+													</div>";
+											}
+											else if($pg_min_percentage >100 )
+											{
+												echo "<div class='alert alert-danger' role='alert'>
+													<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+													<span class='sr-only'>Error:</span>
+
+
+													Enter valid percentage!
+													</div>";
+											}
+											else if($pg_min_cpi4 >4 )
+											{
+												echo "<div class='alert alert-danger' role='alert'>
+													<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+													<span class='sr-only'>Error:</span>
+
+
+													Enter valid cpi-4 value!
+													</div>";
+											}
+											else if($pg_min_cpi8 >8 )
+											{
+												echo "<div class='alert alert-danger' role='alert'>
+													<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+													<span class='sr-only'>Error:</span>
+
+
+													Enter valid cpi-8 value!
+													</div>";
+											}											
 											else
 											{
 												$reset_pg = 1;
@@ -426,22 +526,22 @@
 										<label class="col-md-6">Age*</label>
 										<label class="col-md-6"></label>
 									</div>
-									<input name="age" class="form-control" placeholder="Age"
+									<input name="age" class="form-control" placeholder="Age"									
 									value=';
 									if(isset($_POST['submit_criteria']))
 									{
 										echo $min_age;
 									}
-									if(isset($_POST['submit']))
+									if(isset($_POST['submit'])&& $_SESSION['exists_criteria'] == 1)
 									{
-										echo $e_pg_min_cpi4;
+										echo $e_min_age;
 									}
 									echo '>
 								</div>
 								';
 								if(isset($_POST['submit_criteria']))
 								{	
-									if(empty(trim($min_age)))									
+									if(empty($min_age))
 									{
 										echo "<div class='col-md-offset-5 col-md-2 alert alert-danger' role='alert'>
 											<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
@@ -449,6 +549,16 @@
 
 
 											Enter the min. age!
+											</div>";
+									}
+									else if($min_age <= 15)
+									{
+										echo "<div class='col-md-offset-5 col-md-2 alert alert-danger' role='alert'>
+											<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+											<span class='sr-only'>Error:</span>
+
+
+											Enter the valid age!
 											</div>";
 									}
 									else
