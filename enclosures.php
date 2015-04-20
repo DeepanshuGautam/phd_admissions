@@ -2,12 +2,20 @@
 	session_start();
 	require_once('master_database_connection.php');
 	$appNo = $_GET['app_no'];	
+	$arYr = str_split($_SESSION['year'],2);
+	//echo $arYr[1];
+	if($_SESSION['semester'] == "Even")
+		$s = 'E';
+	else
+		$s = 'O';
+
+	$appNoF = "DM".$arYr[1].$s."D".$appNo;
 ?>
 
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><?php echo $appNo; ?>: Enclosures</title>
+		<title><?php echo $appNoF; ?>: Enclosures</title>
 
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
@@ -23,7 +31,7 @@
 			{
 		?>
 
-		<p class="topMargin"><h1><center>Application No: <?php echo $appNo; ?></center></h1></p>		
+		<p class="topMargin"><h1><center>Application No: <?php echo $appNoF; ?></center></h1></p>		
 		<?php include("print_close.php");?>
 		<ul class="nav nav-tabs content topMargin">
 			<li role="presentation"><a href="personal_info.php?app_no=<?php echo $appNo;?>">Personal Info</a></li>	

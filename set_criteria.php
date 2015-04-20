@@ -70,7 +70,7 @@
 		</ul>	
 
 
-		<form method='post' action='set_criteria.php'>
+		<form id="criteria_form" method='post' action='set_criteria.php'>
 			<?php
 				if(isset($_SESSION['selected']))
 				{
@@ -526,7 +526,8 @@
 										<label class="col-md-6">Age*</label>
 										<label class="col-md-6"></label>
 									</div>
-									<input name="age" class="form-control" placeholder="Age"									
+									<input name="age" id="age" class="form-control" placeholder="Age"	
+									onblur=check_age()								
 									value=';
 									if(isset($_POST['submit_criteria']))
 									{
@@ -735,5 +736,18 @@
 			e.preventDefault();
 		}
 	});
-</script>
+
+	function check_age(){
+		var age = document.getElementById('age').value;
+		if(age.length == 0 || age <= 15)
+		{
+			$("#age").parent().addClass('has-error');
+			$("#submit_criteria").attr('disabled',"");
+		}
+		else
+		{
+			$("#age").parent().removeClass('has-error');
+			$("#submit_criteria").removeAttr('disabled');
+		}
+	}
 </script>
