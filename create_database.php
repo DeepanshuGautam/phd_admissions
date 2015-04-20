@@ -87,7 +87,7 @@
 				{
 					alert_modal("Fill in the year value!");
 				}
-				else if($year < intval(date("Y")) || strlen($year) > 4)
+				else if($year < intval(date("Y")) || strlen($year) != 4 || !is_numeric($year))
 				{
 					alert_modal("Fill in the valid year!");
 				}
@@ -396,10 +396,10 @@
 							<input id="year" name="year" type="text" class="form-control" placeholder="Year"
 								value=
 									<?php
-										if(isset($_POST['submit']) && $done != 1)
+										/*if(isset($_POST['submit']) && $done != 1)
 										{										
 											echo $year;	
-										} 
+										} */
 									?>							
 							>
 						</div>
@@ -444,14 +444,14 @@
 	$("#modal_form").submit(function(e) {
 		//alert("hi");
 		
-		var year = document.getElementById('year').value;
-		//var semester = document.getElementById('semester').value;
-
-		//alert(year);
-		//alert(year.length);
+		var year = document.getElementById('year').value;		
 		if(year.length == 0)
 		{
 			alert("Fill in the year");
+			e.preventDefault();
+		}
+		else if(year.length != 4 || isNaN(year)){
+			alert("fill in the valid year!");
 			e.preventDefault();
 		}
 	});

@@ -28,6 +28,31 @@
 	</div>	
 
 	<?php
+		/*function alert_modal($msg)
+		{				
+			echo'
+				<div class="modal fade" id="alert_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h4 class="modal-title" id="myModalLabel">Alert!</h4>
+							</div>
+							<div class="modal-body">
+								'.$msg.'
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>							
+							</div>
+						</div>
+					</div>
+				</div>
+			';
+
+			echo "<script type='text/javascript'>$('#alert_modal').modal('show')</script>";
+		}*/
+
+	
 
 		//selected database means if some datbase is already active
 		if(!isset($_POST['select']) && !isset($_SESSION['dbName']) && $_SESSION['pageName']!="create_database.php")
@@ -88,7 +113,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
-						<button type="submit" name="change_database" class="btn btn-primary">Change</button>
+						<button data-toggle="modal" data-target="#select" type="button" data-dismiss="modal" name="change_database" class="btn btn-primary">Change</button>
 					</div>
 				</div>
 			</div>
@@ -103,7 +128,17 @@
 		$year = $_POST['year'];	
 		$semester = $_POST['semester'];
 
+		if(empty(trim($year)))
+		{
+			//alert_modal("Fill in the year value!");
+		}
+		else if($year < intval(date("Y")) || strlen($year) > 4)
+		{
+			//alert_modal("Fill in the valid year!");
+		}
 	} 
+
+	
 ?>
 
 <form action="<?php echo $_SESSION['pageName']?>" method="post" id="modal_form">	

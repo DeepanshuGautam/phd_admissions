@@ -20,9 +20,7 @@
 	<body>
 		<?php
 			if(isset($_SESSION['adminUserName']))
-			{
-
-			include("adheader.php");
+			{		
 		?>
 		<p class="topMargin"><h1><center>Application No: <?php echo $appNo; ?></center></h1></p>		
 

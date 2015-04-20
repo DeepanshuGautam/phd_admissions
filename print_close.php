@@ -15,7 +15,7 @@
 	<body>		
 		<div class="row">			
 			<button  id="print" class="buttonPC topMargin col-md-1 col-md-offset-5">Print</button>
-			<button  id="class" class="buttonPC topMargin col-md-1 ">Close</button>			
+			<button  id="close" class="buttonPC topMargin col-md-1 ">Close</button>			
 		</div>				
 	</body>
 </html>

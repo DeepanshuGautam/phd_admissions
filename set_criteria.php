@@ -614,14 +614,14 @@
 	$("#modal_form").submit(function(e) {
 		//alert("hi");
 		
-		var year = document.getElementById('year').value;
-		//var semester = document.getElementById('semester').value;
-
-		//alert(year);
-		//alert(year.length);
+		var year = document.getElementById('year').value;		
 		if(year.length == 0)
 		{
 			alert("Fill in the year");
+			e.preventDefault();
+		}
+		else if(year.length != 4 || isNaN(year)){
+			alert("fill in the valid year!");
 			e.preventDefault();
 		}
 	});

@@ -379,6 +379,10 @@
 			alert("Fill in the year");
 			e.preventDefault();
 		}
+		else if(year.length != 4 || isNaN(year)){
+			alert("fill in the valid year!");
+			e.preventDefault();
+		}
 	});
 	
 </script>

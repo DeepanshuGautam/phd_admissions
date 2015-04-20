@@ -2,7 +2,7 @@ $(document).ready(function(){
 		$('#print').click(function(){
 			window.print();
 		});
-		$('#close').click(function(){
+		$('#close').click(function(){			
 			window.close();
 		});	
 	}
